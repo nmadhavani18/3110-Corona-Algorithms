@@ -1,0 +1,6 @@
+### Starting build.
+# Target: engine.ml.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(oUnit), package(yojson), extension:ml, file:engine.ml, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -modules engine.ml > engine.ml.depends
+# Target: engine.cmo, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(oUnit), package(yojson), byte, compile, extension:cmo, extension:ml, file:engine.cmo, file:engine.ml, implem, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -o engine.cmo engine.ml
+# Compilation successful.
