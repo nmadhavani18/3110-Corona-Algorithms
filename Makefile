@@ -1,4 +1,4 @@
-MODULES=adventure command state main author
+MODULES=engine
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
@@ -26,7 +26,7 @@ finalcheck: check
 	bash finalcheck.sh
 
 zip:
-	zip adventure.zip *.ml* *.json _tags Makefile
+	zip algorithms.zip *.ml* *.json _tags Makefile
 	
 docs: docs-public docs-private
 	
