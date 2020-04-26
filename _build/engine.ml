@@ -1,16 +1,17 @@
 open Soup
 open Core
+open Mechaml
 
-let get_price stock country volume= 
+let get_price stock volume= 
   failwith "unimplemented"
 
-let buy stock country volume = 
+let buy stock volume = 
   failwith "unimplemented"
 
-let sell stock country volume = 
+let sell stock volume = 
   failwith "unimplemented"
 
-let average stock country = 
+let average stock = 
   failwith "unimplemented"
 
 let time = 

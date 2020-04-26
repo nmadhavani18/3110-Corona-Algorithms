@@ -4,3 +4,4 @@ PKG yojson
 PKG ANSITerminal
 PKG core
 PKG lambdasoup
+PKG mechaml

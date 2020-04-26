@@ -1,6 +1,10 @@
 ### Starting build.
-# Target: engine.ml.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(oUnit), package(yojson), extension:ml, file:engine.ml, ocaml, ocamldep, quiet, thread, traverse }
-ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -modules engine.ml > engine.ml.depends
-# Target: engine.cmo, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(oUnit), package(yojson), byte, compile, extension:cmo, extension:ml, file:engine.cmo, file:engine.ml, implem, ocaml, quiet, thread, traverse }
-ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -o engine.cmo engine.ml
+# Target: engine.mli.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:mli, file:engine.mli, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules engine.mli > engine.mli.depends
+# Target: engine.cmi, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:mli, file:engine.mli, interf, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o engine.cmi engine.mli
+# Target: engine.ml.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:ml, file:engine.ml, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules engine.ml > engine.ml.depends
+# Target: engine.cmo, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:cmo, extension:ml, file:engine.cmo, file:engine.ml, implem, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o engine.cmo engine.ml
 # Compilation successful.
