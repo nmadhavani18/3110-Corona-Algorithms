@@ -1,8 +1,0 @@
-"Resource: /Users/AlexanderLin/Documents/cs3110-proj/3110-Corona-Algorithms/engine.ml": "\te\027\241\148W\133\137\143/\1539\198\020\253\146"
-"Rule: ocaml dependencies mli (%=engine )": "\229\230\255a\159`\153\161L\252\132\231\219\141?\194"
-"Resource: /home/nmadhavani18/3110-Corona-Algorithms/engine.ml": "\182\166\195\225`P\199\232\185\180\200t\193P\135\215"
-"Rule: ocaml: mli -> cmi (%=engine )": "5\165o\222\165[\157?\140\137\t\208k|-\170"
-"Rule: ocaml dependencies ml (%=engine )": "\222\167\179\139\171\191\235p\187\157\001\tz\000\1339"
-"Resource: /home/nmadhavani18/3110-Corona-Algorithms/engine.mli": "\212\029\140\217\143\000\178\004\233\128\t\152\236\248B~"
-"Rule: ocaml: ml & cmi -> cmo (%=engine )": "\nRx\186\142rj\198!\207l\253\186\030\244\129"
-"Rule: ocaml: ml -> cmo & cmi (%=engine )": "\164\018\179\147wX7\006\024\234\214\003\136\250\188l"
