@@ -11,7 +11,7 @@ let get_url (stock:string) =
 let rec id_helper id = 
   match id with 
   | None -> false
-  | Some a -> if a = "Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)" then true else false
+  | Some a -> if a = "neilmadhavani" then true else false
 
 let rec leaf_helper leaf = 
   match leaf with 
@@ -25,7 +25,7 @@ let rec get_html_helper (lst: (string option * string option) list) =
 
 let get_html stock = 
   Soup.parse (read_file "html/apple.html") 
-  |> Soup.select "span" 
+  |> Soup.select "title" 
   |> Soup.to_list 
   |> List.map (fun span -> Soup.id span, Soup.leaf_text span)
   |> get_html_helper
@@ -34,7 +34,8 @@ let print_price stock =
   print_string (get_html stock)
 
 let get_price stock volume= 
-  get_html stock |> float_of_string
+  get_html stock 
+(* |> float_of_string  *)
 
 let record transType stock volume price time =
   ""
