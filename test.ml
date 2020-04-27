@@ -2,7 +2,7 @@ open OUnit
 open Engine
 
 let tests = [
-  "test 1" >:: fun _ -> assert_equal "282.97" (Engine.get_price "hi" 2)
+  "test 1" >:: fun _ -> assert_equal "AAPL 282.97 7.94 2.89% : Apple Inc. - Yahoo Finance" (Engine.get_price "hi" 2)
       ~printer:(fun x -> x);
 ]
 
