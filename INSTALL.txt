@@ -1,0 +1,5 @@
+Packages:
+
+opam install lambdasoup
+opam install core
+opam install mechaml
