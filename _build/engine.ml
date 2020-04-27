@@ -16,7 +16,7 @@ let print_price stock =
   print_string (get_html stock)
 
 let get_price stock volume= 
-  get_html stock
+  get_html stock |> float_of_string
 
 let buy stock volume = 
   failwith "unimplemented"
