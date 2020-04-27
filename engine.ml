@@ -11,6 +11,10 @@ let get_html stock =
   Soup.parse (read_file "/html/apple.html") 
   |> Soup.R.select_one "Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)" 
   |> Soup.to_string
+(* Soup.parse (read_file "html/apple.html") 
+   |> Soup.select "span" 
+   |> Soup.to_list 
+   |> List.map (fun span -> Soup.R.id span, Soup.R.leaf_text span) *)
 
 let print_price stock = 
   print_string (get_html stock)
@@ -18,20 +22,21 @@ let print_price stock =
 let get_price stock volume= 
   get_html stock |> float_of_string
 
-let buy stock volume = 
-  failwith "unimplemented"
-
-let sell stock volume = 
-  failwith "unimplemented"
-
-let average stock = 
-  failwith "unimplemented"
+let record transType stock volume price time =
+  ""
 
 let time = 
-  failwith "unimplemented"
+  Core.Time.of_date_ofday_precise
+
+let buy stock volume = 
+  record "buy" stock volume (get_price stock volume) time
+
+let sell stock volume = 
+  record "sell" stock volume (get_price stock volume) time
+
+let average stock = 
+  ""
 
 let compare price1 price2 = 
-  failwith "unimplemented"
+  if price1 > price2 then price1 else if price2 > price1 then price1 else -1
 
-let record transType stock volume price time =
-  failwith "unimplemented"
