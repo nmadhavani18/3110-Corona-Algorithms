@@ -1,16 +1,14 @@
 ### Starting build.
-# Target: test.ml.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), debug, extension:ml, file:test.ml, ocaml, ocamldep, quiet, thread, traverse }
-ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules test.ml > test.ml.depends
-# Target: engine.mli.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), debug, extension:mli, file:engine.mli, ocaml, ocamldep, quiet, thread, traverse }
-ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules engine.mli > engine.mli.depends # cached
-# Target: engine.cmi, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, debug, extension:mli, file:engine.mli, interf, ocaml, quiet, thread, traverse }
-ocamlfind ocamlc -c -g -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o engine.cmi engine.mli
-# Target: test.cmo, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, debug, extension:cmo, extension:ml, file:test.cmo, file:test.ml, implem, ocaml, quiet, thread, traverse }
-ocamlfind ocamlc -c -g -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o test.cmo test.ml
-+ ocamlfind ocamlc -c -g -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o test.cmo test.ml
-File "test.ml", line 5, characters 45-61:
-5 |   "test 1" >:: fun _ -> assert_equal 282.97 (Engine.get_price "hi" 2);
-                                                 ^^^^^^^^^^^^^^^^
-Error: Unbound value Engine.get_price
-Command exited with code 2.
-# Compilation unsuccessful.
+# Target: engine.ml.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:ml, file:engine.ml, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules engine.ml > engine.ml.depends # cached
+# Target: engine.cmo, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:cmo, extension:ml, file:engine.cmo, file:engine.ml, implem, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o engine.cmo engine.ml
+# Target: authors.mli.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:mli, file:authors.mli, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules authors.mli > authors.mli.depends
+# Target: authors.cmi, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:mli, file:authors.mli, interf, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o authors.cmi authors.mli
+# Target: authors.ml.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:ml, file:authors.ml, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules authors.ml > authors.ml.depends
+# Target: authors.cmo, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:cmo, extension:ml, file:authors.cmo, file:authors.ml, implem, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o authors.cmo authors.ml
+# Compilation successful.
