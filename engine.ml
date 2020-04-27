@@ -8,16 +8,26 @@ open Stdlib
 let get_url (stock:string) = 
   "https://finance.yahoo.com/quote/AAPL/key-statistics/"
 
-let rec get_html_helper (lst:(string*string) list) = 
+let rec id_helper id = 
+  match id with 
+  | None -> false
+  | Some a -> if a = "Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)" then true else false
+
+let rec leaf_helper leaf = 
+  match leaf with 
+  | None -> ""
+  | Some a -> a
+
+let rec get_html_helper (lst: (string option * string option) list) = 
   match lst with 
   | [] -> ""
-  | (id,leaf)::t -> if (id = "Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)") then leaf else get_html_helper t
+  | (id,leaf)::t -> if id_helper id then leaf_helper leaf else get_html_helper t
 
 let get_html stock = 
   Soup.parse (read_file "html/apple.html") 
   |> Soup.select "span" 
   |> Soup.to_list 
-  |> List.map (fun span -> Soup.R.id span, Soup.R.leaf_text span)
+  |> List.map (fun span -> Soup.id span, Soup.leaf_text span)
   |> get_html_helper
 
 let print_price stock = 
