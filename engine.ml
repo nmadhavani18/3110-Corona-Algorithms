@@ -13,7 +13,7 @@ let get_url_helper (result) =
 
 (* let get_url (stock:string) = 
    Lwt.bind (Mechaml.Agent.get "https://www.marketbeat.com/stocks/NASDAQ/AAPL/")
-   get_url_helper *)
+    get_url_helper *)
 
 let rec id_helper id = 
   match id with 
@@ -53,7 +53,7 @@ let record transType stock volume price time =
   print_endline (Transactions_j.string_of_transaction transaction)
 
 let time = 
-  Core.Time.to_string_trimmed
+  Core.Time.now () |> Core.Time.to_string
 
 let buy stock volume = 
   record "buy" stock volume (get_price stock volume) time

@@ -6,7 +6,7 @@ type transaction = Transactions_t.transaction = {
   stock: string;
   volume: int;
   price: float;
-  time: float
+  time: string
 }
 
 val write_transaction :

@@ -6,5 +6,5 @@ type transaction = {
   stock: string;
   volume: int;
   price: float;
-  time: float
+  time: string
 }

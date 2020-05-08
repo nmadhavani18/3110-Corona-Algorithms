@@ -6,11 +6,11 @@ type transaction = Transactions_t.transaction = {
   stock: string;
   volume: int;
   price: float;
-  time: float
+  time: string
 }
 
 let write_transaction : _ -> transaction -> _ = (
-  fun ob (x : transaction) ->
+  fun ob x ->
     Bi_outbuf.add_char ob '{';
     let is_first = ref true in
     if !is_first then
@@ -55,7 +55,7 @@ let write_transaction : _ -> transaction -> _ = (
       Bi_outbuf.add_char ob ',';
     Bi_outbuf.add_string ob "\"time\":";
     (
-      Yojson.Safe.write_float
+      Yojson.Safe.write_string
     )
       ob x.time;
     Bi_outbuf.add_char ob '}';
@@ -68,11 +68,12 @@ let read_transaction = (
   fun p lb ->
     Yojson.Safe.read_space p lb;
     Yojson.Safe.read_lcurl p lb;
-    let field_action = ref (None) in
-    let field_stock = ref (None) in
-    let field_volume = ref (None) in
-    let field_price = ref (None) in
-    let field_time = ref (None) in
+    let field_action = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_stock = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_volume = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_price = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_time = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let bits0 = ref 0 in
     try
       Yojson.Safe.read_space p lb;
       Yojson.Safe.read_object_end lb;
@@ -144,44 +145,39 @@ let read_transaction = (
         match i with
           | 0 ->
             field_action := (
-              Some (
-                (
-                  Atdgen_runtime.Oj_run.read_string
-                ) p lb
-              )
+              (
+                Atdgen_runtime.Oj_run.read_string
+              ) p lb
             );
+            bits0 := !bits0 lor 0x1;
           | 1 ->
             field_stock := (
-              Some (
-                (
-                  Atdgen_runtime.Oj_run.read_string
-                ) p lb
-              )
+              (
+                Atdgen_runtime.Oj_run.read_string
+              ) p lb
             );
+            bits0 := !bits0 lor 0x2;
           | 2 ->
             field_volume := (
-              Some (
-                (
-                  Atdgen_runtime.Oj_run.read_int
-                ) p lb
-              )
+              (
+                Atdgen_runtime.Oj_run.read_int
+              ) p lb
             );
+            bits0 := !bits0 lor 0x4;
           | 3 ->
             field_price := (
-              Some (
-                (
-                  Atdgen_runtime.Oj_run.read_number
-                ) p lb
-              )
+              (
+                Atdgen_runtime.Oj_run.read_number
+              ) p lb
             );
+            bits0 := !bits0 lor 0x8;
           | 4 ->
             field_time := (
-              Some (
-                (
-                  Atdgen_runtime.Oj_run.read_number
-                ) p lb
-              )
+              (
+                Atdgen_runtime.Oj_run.read_string
+              ) p lb
             );
+            bits0 := !bits0 lor 0x10;
           | _ -> (
               Yojson.Safe.skip_json p lb
             )
@@ -257,44 +253,39 @@ let read_transaction = (
           match i with
             | 0 ->
               field_action := (
-                Some (
-                  (
-                    Atdgen_runtime.Oj_run.read_string
-                  ) p lb
-                )
+                (
+                  Atdgen_runtime.Oj_run.read_string
+                ) p lb
               );
+              bits0 := !bits0 lor 0x1;
             | 1 ->
               field_stock := (
-                Some (
-                  (
-                    Atdgen_runtime.Oj_run.read_string
-                  ) p lb
-                )
+                (
+                  Atdgen_runtime.Oj_run.read_string
+                ) p lb
               );
+              bits0 := !bits0 lor 0x2;
             | 2 ->
               field_volume := (
-                Some (
-                  (
-                    Atdgen_runtime.Oj_run.read_int
-                  ) p lb
-                )
+                (
+                  Atdgen_runtime.Oj_run.read_int
+                ) p lb
               );
+              bits0 := !bits0 lor 0x4;
             | 3 ->
               field_price := (
-                Some (
-                  (
-                    Atdgen_runtime.Oj_run.read_number
-                  ) p lb
-                )
+                (
+                  Atdgen_runtime.Oj_run.read_number
+                ) p lb
               );
+              bits0 := !bits0 lor 0x8;
             | 4 ->
               field_time := (
-                Some (
-                  (
-                    Atdgen_runtime.Oj_run.read_number
-                  ) p lb
-                )
+                (
+                  Atdgen_runtime.Oj_run.read_string
+                ) p lb
               );
+              bits0 := !bits0 lor 0x10;
             | _ -> (
                 Yojson.Safe.skip_json p lb
               )
@@ -302,13 +293,14 @@ let read_transaction = (
       done;
       assert false;
     with Yojson.End_of_object -> (
+        if !bits0 <> 0x1f then Atdgen_runtime.Oj_run.missing_fields p [| !bits0 |] [| "action"; "stock"; "volume"; "price"; "time" |];
         (
           {
-            action = (match !field_action with Some x -> x | None -> Atdgen_runtime.Oj_run.missing_field p "action");
-            stock = (match !field_stock with Some x -> x | None -> Atdgen_runtime.Oj_run.missing_field p "stock");
-            volume = (match !field_volume with Some x -> x | None -> Atdgen_runtime.Oj_run.missing_field p "volume");
-            price = (match !field_price with Some x -> x | None -> Atdgen_runtime.Oj_run.missing_field p "price");
-            time = (match !field_time with Some x -> x | None -> Atdgen_runtime.Oj_run.missing_field p "time");
+            action = !field_action;
+            stock = !field_stock;
+            volume = !field_volume;
+            price = !field_price;
+            time = !field_time;
           }
          : transaction)
       )
