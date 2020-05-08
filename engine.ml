@@ -1,19 +1,13 @@
 open Soup
 open Core
-open Mechaml
 open Printf
 open List
 open Stdlib
 open Transactions_t
 open Transactions_j
 
-let get_url_helper (result) = 
-  match result with
-  | (x,y) -> Agent.HttpResponse.content y |> Lwt.return
-
-(* let get_url (stock:string) = 
-   Lwt.bind (Mechaml.Agent.get "https://www.marketbeat.com/stocks/NASDAQ/AAPL/")
-    get_url_helper *)
+let get_url stock = 
+  String.concat "" ["https://www.marketbeat.com/stocks/NASDAQ/"; stock; "/"] 
 
 let rec id_helper id = 
   match id with 
@@ -25,27 +19,26 @@ let rec leaf_helper leaf =
   | None -> ""
   | Some a -> a
 
-let rec get_html_helper (lst: (string option * string option) list) = 
+let rec parse_html_helper lst = 
   match lst with 
   | [] -> ""
-  | (id,leaf)::t -> if id_helper id then leaf_helper leaf else get_html_helper t
+  | (id,leaf)::t -> if id_helper id then leaf_helper leaf else parse_html_helper t
 
-let get_html stock = 
+let parse_html stock = 
   let nums = ['0'; '1'; '2'; '3'; '4'; '5'; '6'; '7'; '8'; '9'; '.'] in
   Soup.parse (read_file "html/apple2.html") 
   |> Soup.select "strong" 
   |> Soup.to_list 
   |> List.map (fun span -> Soup.id span, Soup.leaf_text span)
-  |> get_html_helper
+  |> parse_html_helper
   |> Core.String.filter ~f: (fun x -> List.mem x nums)
   |> float_of_string
 
 let print_price stock = 
-  print_float (get_html stock)
+  print_float (parse_html stock)
 
 let get_price stock volume= 
-  get_html stock 
-(* |> float_of_string  *)
+  parse_html stock 
 
 let record transType stock volume price time =
   let transaction = { action = transType; stock = stock; volume = volume;
