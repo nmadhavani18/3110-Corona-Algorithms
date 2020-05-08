@@ -3,8 +3,6 @@ open Core
 open Printf
 open List
 open Stdlib
-open Transactions_t
-open Transactions_j
 
 let get_url stock = 
   String.concat "" ["https://www.marketbeat.com/stocks/NASDAQ/"; stock; "/"] 
