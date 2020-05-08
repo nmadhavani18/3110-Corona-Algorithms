@@ -44,9 +44,7 @@ let get_price stock volume=
   parse_html stock 
 
 let record transType stock volume price time =
-  let transaction = { action = transType; stock = stock; volume = volume;
-                      price = price; time = time } in 
-  print_endline (Transactions_j.string_of_transaction transaction)
+  ""
 
 let time = 
   Core.Time.now () |> Core.Time.to_string
