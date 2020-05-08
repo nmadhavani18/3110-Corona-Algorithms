@@ -4,6 +4,8 @@ open Printf
 open List
 open Stdlib
 
+let transactions = []
+
 let get_url stock = 
   String.concat "" ["https://www.marketbeat.com/stocks/NASDAQ/"; stock; "/"] 
 
@@ -42,7 +44,7 @@ let get_price stock volume=
   parse_html stock 
 
 let record transType stock volume price time =
-  ""
+  (transType, stock, volume, price, time)::transactions
 
 let time = 
   Core.Time.now () |> Core.Time.to_string
