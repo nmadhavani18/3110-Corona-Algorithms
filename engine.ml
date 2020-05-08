@@ -9,6 +9,9 @@ open Transactions_j
 let get_url stock = 
   String.concat "" ["https://www.marketbeat.com/stocks/NASDAQ/"; stock; "/"] 
 
+let get_file stock =
+  String.concat "" [stock; ".html"]
+
 let rec id_helper id = 
   match id with 
   | None -> true
