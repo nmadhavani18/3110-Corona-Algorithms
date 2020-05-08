@@ -7,13 +7,18 @@ open Stdlib
 open Transactions_t
 open Transactions_j
 
-let get_url (stock:string) = 
-  "https://finance.yahoo.com/quote/AAPL/key-statistics/"
+let get_url_helper (result) = 
+  match result with
+  | (x,y) -> Agent.HttpResponse.content y |> Lwt.return
+
+(* let get_url (stock:string) = 
+   Lwt.bind (Mechaml.Agent.get "https://www.marketbeat.com/stocks/NASDAQ/AAPL/")
+   get_url_helper *)
 
 let rec id_helper id = 
   match id with 
-  | None -> false
-  | Some a -> if a = "neilmadhavani" then true else false
+  | None -> true
+  | Some a -> if a = "some-other-id" then true else false
 
 let rec leaf_helper leaf = 
   match leaf with 
@@ -26,14 +31,17 @@ let rec get_html_helper (lst: (string option * string option) list) =
   | (id,leaf)::t -> if id_helper id then leaf_helper leaf else get_html_helper t
 
 let get_html stock = 
-  Soup.parse (read_file "html/apple.html") 
-  |> Soup.select "title" 
+  let nums = ['0'; '1'; '2'; '3'; '4'; '5'; '6'; '7'; '8'; '9'; '.'] in
+  Soup.parse (read_file "html/apple2.html") 
+  |> Soup.select "strong" 
   |> Soup.to_list 
   |> List.map (fun span -> Soup.id span, Soup.leaf_text span)
   |> get_html_helper
+  |> Core.String.filter ~f: (fun x -> List.mem x nums)
+  |> float_of_string
 
 let print_price stock = 
-  print_string (get_html stock)
+  print_float (get_html stock)
 
 let get_price stock volume= 
   get_html stock 

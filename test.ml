@@ -2,8 +2,9 @@ open OUnit
 open Engine
 
 let tests = [
-  "test 1" >:: fun _ -> assert_equal "AAPL 282.97 7.94 2.89% : Apple Inc. - Yahoo Finance" (Engine.get_price "hi" 2)
-      ~printer:(fun x -> x);
+  (* "test 1" >:: fun _ -> assert_equal "250.00" (Engine.get_price "hi" 2)
+      ~printer:(fun x -> x); *)
+  "test 1" >:: fun _ -> assert_equal 288.79 (Engine.get_price "hi" 2);
 ]
 
 let suite =
