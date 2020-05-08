@@ -4,6 +4,8 @@ open Mechaml
 open Printf
 open List
 open Stdlib
+open Transactions_t
+open Transactions_j
 
 let get_url (stock:string) = 
   "https://finance.yahoo.com/quote/AAPL/key-statistics/"
@@ -38,7 +40,9 @@ let get_price stock volume=
 (* |> float_of_string  *)
 
 let record transType stock volume price time =
-  ""
+  let transaction = { action = transType; stock = stock; volume = volume;
+                      price = price; time = time } in 
+  print_endline (Transactions_j.string_of_transaction transaction)
 
 let time = 
   Core.Time.of_date_ofday_precise
