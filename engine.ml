@@ -26,6 +26,7 @@ let body stock=
 
 let file stock =
   let body = Lwt_main.run (body stock) in
+  (* print_endline ("Received body\n" ^ body); *)
   body
 
 let rec id_helper id = 
@@ -45,7 +46,7 @@ let rec parse_html_helper lst =
 
 let parse_html stock = 
   let nums = ['0'; '1'; '2'; '3'; '4'; '5'; '6'; '7'; '8'; '9'; '.'] in
-  Soup.parse (read_file "html/apple2.html") 
+  Soup.parse (read_file "html/apple3.html") 
   |> Soup.select "strong" 
   |> Soup.to_list 
   |> List.map (fun span -> Soup.id span, Soup.leaf_text span)
