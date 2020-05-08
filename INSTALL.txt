@@ -2,4 +2,6 @@ Packages:
 
 opam install lambdasoup
 opam install core
-opam install mechaml
+opam install cohttp lwt js_of_ocaml
+opam depext lwt_ssl
+opam install lwt_ssl

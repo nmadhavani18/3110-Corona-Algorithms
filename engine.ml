@@ -61,7 +61,9 @@ let get_price stock volume=
   parse_html stock 
 
 let record transType stock volume price time =
-  (transType, stock, volume, price, time)::transactions
+  Out_channel.write_all "transactions.txt" ~data:
+    (String.concat " " [transType; stock; (string_of_int volume); 
+                        (string_of_float price); time])
 
 let time = 
   Core.Time.now () |> Core.Time.to_string

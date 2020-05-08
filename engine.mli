@@ -1,4 +1,3 @@
-val transactions : (string * string * int * float * string) list
 
 val get_price : 'a -> 'b -> float
 
