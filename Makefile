@@ -1,4 +1,4 @@
-MODULES=engine authors transactions_j transactions_t
+MODULES=engine authors 
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
