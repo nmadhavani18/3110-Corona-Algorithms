@@ -1,1 +1,0 @@
-val get_price : 'a -> 'b -> string

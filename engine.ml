@@ -53,7 +53,7 @@ let record transType stock volume price time =
   print_endline (Transactions_j.string_of_transaction transaction)
 
 let time = 
-  Core.Time.of_date_ofday_precise
+  Core.Time.to_string_trimmed
 
 let buy stock volume = 
   record "buy" stock volume (get_price stock volume) time
