@@ -1,0 +1,26 @@
+### Starting build.
+# Target: engine.mli.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:mli, file:engine.mli, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules engine.mli > engine.mli.depends # cached
+# Target: engine.cmi, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:mli, file:engine.mli, interf, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o engine.cmi engine.mli # cached
+# Target: engine.ml.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:ml, file:engine.ml, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules engine.ml > engine.ml.depends
+# Target: transactions_j.mli.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:mli, file:transactions_j.mli, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules transactions_j.mli > transactions_j.mli.depends
+# Target: transactions_t.mli.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:mli, file:transactions_t.mli, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules transactions_t.mli > transactions_t.mli.depends # cached
+# Target: transactions_t.cmi, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:mli, file:transactions_t.mli, interf, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o transactions_t.cmi transactions_t.mli # cached
+# Target: transactions_j.cmi, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:mli, file:transactions_j.mli, interf, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o transactions_j.cmi transactions_j.mli
+# Target: engine.cmo, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:cmo, extension:ml, file:engine.cmo, file:engine.ml, implem, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o engine.cmo engine.ml
+# Target: authors.mli.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:mli, file:authors.mli, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules authors.mli > authors.mli.depends # cached
+# Target: authors.cmi, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:mli, file:authors.mli, interf, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o authors.cmi authors.mli # cached
+# Target: authors.ml.depends, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), extension:ml, file:authors.ml, ocaml, ocamldep, quiet, thread, traverse }
+ocamlfind ocamldep -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -modules authors.ml > authors.ml.depends # cached
+# Target: authors.cmo, tags: { package(ANSITerminal), package(core), package(lambdasoup), package(mechaml), package(oUnit), package(yojson), byte, compile, extension:cmo, extension:ml, file:authors.cmo, file:authors.ml, implem, ocaml, quiet, thread, traverse }
+ocamlfind ocamlc -c -thread -package core -package lambdasoup -package yojson -package oUnit -package ANSITerminal -package mechaml -o authors.cmo authors.ml # cached
+# Compilation successful.

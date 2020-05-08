@@ -1,0 +1,7 @@
+type transaction = {
+  action : string;
+  stock : string;
+  volume : int;
+  price : float;
+  time : float
+}
