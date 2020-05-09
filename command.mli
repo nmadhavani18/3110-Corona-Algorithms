@@ -9,5 +9,6 @@ type command =
   | Threshold of string list
   | Portfolio
   | Stop
+  | Quit
 
 val parse : string -> command

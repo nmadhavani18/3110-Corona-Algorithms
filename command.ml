@@ -10,6 +10,7 @@ type command =
   | Threshold of string list
   | Portfolio
   | Stop
+  | Quit
 
 let check_valid_price_command command = 
   match command with 
@@ -31,14 +32,19 @@ let check_valid_threshold_command command =
   | [] -> raise Empty
   | _ -> Threshold command
 
+let check_valid_quit_command command = 
+  match command with
+  | [] -> Quit
+  | h::t -> raise Malformed
+
 let info_command command = 
-Info
+  Info
 
 let portfolio_command command = 
-Portfolio
+  Portfolio
 
 let stop_command command = 
-Stop
+  Stop
 
 let parse str =
   match (String.split_on_char ' ' str |> List.filter (fun x -> x <> "") ) with
@@ -46,6 +52,7 @@ let parse str =
   | h::t -> if (h = "price") then (check_valid_price_command t) else 
     if (h = "buy") then (check_valid_buy_command t) else if (h = "sell") 
     then (check_valid_sell_command t) else if (h = "threshold") then 
-    (check_valid_threshold_command t) else if (h = "info") then 
-    (info_command t) else if (h = "portfolio") then (portfolio_command t) else
-    if (h = "stop") then (stop_command t) else raise Malformed
+      (check_valid_threshold_command t) else if (h = "info") then 
+      (info_command t) else if (h = "portfolio") then (portfolio_command t) else
+    if (h = "stop") then (stop_command t) else if (h = "quit") then 
+      (check_valid_quit_command t) else raise Malformed
