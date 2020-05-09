@@ -15,17 +15,17 @@ type command =
 let check_valid_price_command command = 
   match command with 
   | [] -> raise Empty
-  | _ -> Price command
+  | _ -> if List.length command != 2 then raise Malformed else Price command
 
 let check_valid_buy_command command = 
   match command with 
   | [] -> raise (Empty)
-  | _ -> Buy command
+  | _ -> if List.length command != 2 then raise Malformed else Buy command
 
 let check_valid_sell_command command = 
   match command with 
   | [] -> raise (Empty)
-  | _ -> Sell command
+  | _ -> if List.length command != 2 then raise Malformed else Sell command
 
 let check_valid_threshold_command command = 
   match command with 

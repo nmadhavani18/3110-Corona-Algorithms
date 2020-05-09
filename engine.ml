@@ -81,32 +81,26 @@ let get_price stock volume=
      price *. float_volume)
 
 let record transType stock volume price time =
-  Out_channel.write_all "transactions.txt" ~data:
-    (String.concat " " [stock; transType; (string_of_int volume); 
-                        (string_of_float price); time])
+  (String.concat " " [transType; (string_of_int volume); "shares of"; stock;
+                      "at"; (string_of_float price); "on"; time])
 
-let line_of_channel channel = 
-  Stream.from (fun _ -> 
-      try Some (input_line channel) with End_of_file -> None)
-
-let data_list = 
-  let in_channel = open_in "transactions.txt" in
-  try 
-    Stream.iter (fun line -> ()) (line_of_channel in_channel);
-    close_in in_channel
-  with excptn ->
-    close_in in_channel;
-    raise excptn
+let record_file filename str = 
+  let out_channel = Out_channel.create ~append:true filename in 
+  protect ~f:(fun () -> fprintf out_channel "%s\n" str)
+    ~finally:(fun () -> Out_channel.close out_channel)                  
 
 let time =  
   Core.Time.now () |> Core.Time.to_string
 
 let buy stock volume = 
-  record "buy" stock volume (get_price stock volume) time
+  let record_string = record "bought" stock volume (get_price stock volume) time in
+  record_file "transactions.txt" record_string
 
 let sell stock volume = 
-  record "sell" stock volume (get_price stock volume) time
+  let record_string = record "sold" stock volume (get_price stock volume) time in
+  record_file "transactions.txt" record_string
 
 let compare price1 price2 = 
   if price1 > price2 then price1 else if price2 > price1 then price1 else -1
+
 
