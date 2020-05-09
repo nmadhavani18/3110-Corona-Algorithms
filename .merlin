@@ -5,3 +5,6 @@ PKG ANSITerminal
 PKG core
 PKG lambdasoup
 PKG mechaml
+PKG lwt
+PKG cohttp
+PKG cohttp_lwt_unix

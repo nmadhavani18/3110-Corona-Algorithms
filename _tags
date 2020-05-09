@@ -1,1 +1,1 @@
-true: package(core), package(lambdasoup), package(yojson), package(oUnit), package(ANSITerminal), package(mechaml), thread
+true: package(core), package(lambdasoup), package(yojson), package(oUnit), package(ANSITerminal), package(lwt), package(cohttp), package(cohttp-lwt-unix), thread

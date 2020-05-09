@@ -11,21 +11,19 @@ let get_url stock =
   String.concat "" ["https://www.marketbeat.com/stocks/NASDAQ/"; stock; "/"] 
 
 let get_file stock =
-  String.concat "" [stock; ".html"]
+  String.concat "" ["html/"; stock; ".html"]
 
 let body stock=
   Client.get (Uri.of_string (get_url stock)) >>= fun (resp, body) ->
-  let code = resp |> Response.status |> Code.code_of_status in
-  Printf.printf "Response code: %d\n" code;
-  Printf.printf "Headers: %s\n" (resp |> Response.headers |> Header.to_string);
   body |> Cohttp_lwt.Body.to_string >|= fun body ->
-  Printf.printf "Body of length: %d\n" (String.length body);
   body
 
 let file stock =
   let body = Lwt_main.run (body stock) in
-  (* print_endline ("Received body\n" ^ body); *)
   body
+
+let save_file stock = 
+  Core.Out_channel.write_all (get_file stock) ~data:(file stock)
 
 let rec id_helper id = 
   match id with 
@@ -44,7 +42,7 @@ let rec parse_html_helper lst =
 
 let parse_html stock = 
   let nums = ['0'; '1'; '2'; '3'; '4'; '5'; '6'; '7'; '8'; '9'; '.'] in
-  Soup.parse (read_file "html/apple3.html") 
+  Soup.parse (read_file (get_file stock)) 
   |> Soup.select "strong" 
   |> Soup.to_list 
   |> List.map (fun span -> Soup.id span, Soup.leaf_text span)
@@ -56,7 +54,10 @@ let print_price stock =
   print_float (parse_html stock)
 
 let get_price stock volume= 
-  parse_html stock 
+  save_file stock;
+  let price = parse_html stock in
+  let float_volume = float_of_int volume in
+  price *. float_volume
 
 let record transType stock volume price time =
   Out_channel.write_all "transactions.txt" ~data:
@@ -76,8 +77,6 @@ let data_list =
     close_in in_channel;
     raise excptn
 
-
-
 let time =  
   Core.Time.now () |> Core.Time.to_string
 
@@ -86,10 +85,6 @@ let buy stock volume =
 
 let sell stock volume = 
   record "sell" stock volume (get_price stock volume) time
-
-
-let average stock = 
-  ""
 
 let compare price1 price2 = 
   if price1 > price2 then price1 else if price2 > price1 then price1 else -1

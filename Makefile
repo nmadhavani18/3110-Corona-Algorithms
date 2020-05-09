@@ -32,12 +32,12 @@ docs: docs-public docs-private
 	
 docs-public: build
 	mkdir -p doc.public
-	ocamlfind ocamldoc -I _build -package yojson,ANSITerminal,lambdasoup,core \
+	ocamlfind ocamldoc -I _build -package yojson,ANSITerminal,lambdasoup,core, lwt, cohttp, cohttp-lwt-unix\
 		-html -stars -d doc.public $(MLIS)
 
 docs-private: build
 	mkdir -p doc.private
-	ocamlfind ocamldoc -I _build -package yojson,ANSITerminal,lambdasoup,core \
+	ocamlfind ocamldoc -I _build -package yojson,ANSITerminal,lambdasoup,core, lwt, cohttp, cohttp-lwt-unix\
 		-html -stars -d doc.private \
 		-inv-merge-ml-mli -m A $(MLIS) $(MLS)
 
