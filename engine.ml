@@ -10,6 +10,9 @@ open Stdlib
 let get_url stock = 
   String.concat "" ["https://www.marketbeat.com/stocks/NASDAQ/"; stock; "/"] 
 
+let get_NYSE_url stock = 
+  String.concat "" ["https://www.marketbeat.com/stocks/NYSE/"; stock; "/"]
+
 let get_file stock =
   String.concat "" ["html/"; stock; ".html"]
 
@@ -18,12 +21,24 @@ let body stock=
   body |> Cohttp_lwt.Body.to_string >|= fun body ->
   body
 
+let body_NYSE stock=
+  Client.get (Uri.of_string (get_NYSE_url stock)) >>= fun (resp, body) ->
+  body |> Cohttp_lwt.Body.to_string >|= fun body ->
+  body
+
 let file stock =
   let body = Lwt_main.run (body stock) in
   body
 
+let file_NYSE stock =
+  let body = Lwt_main.run (body_NYSE stock) in
+  body
+
 let save_file stock = 
   Core.Out_channel.write_all (get_file stock) ~data:(file stock)
+
+let save_file_NYSE stock = 
+  Core.Out_channel.write_all (get_file stock) ~data:(file_NYSE stock)
 
 let rec id_helper id = 
   match id with 
@@ -54,10 +69,16 @@ let print_price stock =
   print_float (parse_html stock)
 
 let get_price stock volume= 
-  save_file stock;
-  let price = parse_html stock in
-  let float_volume = float_of_int volume in
-  price *. float_volume
+  try 
+    (save_file stock;
+     let price = parse_html stock in
+     let float_volume = float_of_int volume in
+     price *. float_volume)
+  with _ ->
+    (save_file_NYSE stock;
+     let price = parse_html stock in
+     let float_volume = float_of_int volume in
+     price *. float_volume)
 
 let record transType stock volume price time =
   Out_channel.write_all "transactions.txt" ~data:
