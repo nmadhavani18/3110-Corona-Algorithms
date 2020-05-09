@@ -1,9 +1,9 @@
-MODULES=engine authors 
+MODULES=engine authors command run
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
 TEST=test.byte
-MAIN=main.byte
+MAIN=run.byte
 OCAMLBUILD=ocamlbuild -use-ocamlfind -r
 
 default: build
