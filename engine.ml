@@ -7,8 +7,6 @@ open Cohttp
 open Cohttp_lwt_unix
 open Stdlib
 
-let transactions = []
-
 let get_url stock = 
   String.concat "" ["https://www.marketbeat.com/stocks/NASDAQ/"; stock; "/"] 
 
@@ -62,10 +60,25 @@ let get_price stock volume=
 
 let record transType stock volume price time =
   Out_channel.write_all "transactions.txt" ~data:
-    (String.concat " " [transType; stock; (string_of_int volume); 
+    (String.concat " " [stock; transType; (string_of_int volume); 
                         (string_of_float price); time])
 
-let time = 
+let line_of_channel channel = 
+  Stream.from (fun _ -> 
+      try Some (input_line channel) with End_of_file -> None)
+
+let data_list = 
+  let in_channel = open_in "transactions.txt" in
+  try 
+    Stream.iter (fun line -> ()) (line_of_channel in_channel);
+    close_in in_channel
+  with excptn ->
+    close_in in_channel;
+    raise excptn
+
+
+
+let time =  
   Core.Time.now () |> Core.Time.to_string
 
 let buy stock volume = 
@@ -73,6 +86,7 @@ let buy stock volume =
 
 let sell stock volume = 
   record "sell" stock volume (get_price stock volume) time
+
 
 let average stock = 
   ""
