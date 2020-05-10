@@ -13,41 +13,57 @@ type command =
   | Stop
   | Quit
 
+(** [price_command command] parses the inputted price command into a command 
+    and a tail list, raising an exception if the input format is not correct. *)
 let price_command command = 
   match command with 
   | [] -> raise Empty
   | _ -> if List.length command != 2 then raise Malformed else Price command
 
+(** [buy_command command] parses the inputted buy command into a command 
+    and a tail list, raising an exception if the input format is not correct. *)
 let buy_command command = 
   match command with 
   | [] -> raise (Empty)
   | _ -> if List.length command != 2 then raise Malformed else Buy command
 
+(** [sell_command command] parses the inputted sell command into a command 
+    and a tail list, raising an exception if the input format is not correct. *)
 let sell_command command = 
   match command with 
   | [] -> raise (Empty)
   | _ -> if List.length command != 2 then raise Malformed else Sell command
 
+(** [threshold_command command] parses the inputted threshold command into a command 
+    and a tail list, raising an exception if the input format is not correct. *)
 let threshold_command command = 
   match command with 
   | [] -> raise Empty
   | _ -> if List.length command != 4 then raise Malformed else Threshold command
 
+(** [quit_command command] returns a Quit command and raises exception Malformed
+if Quit is followed by another input. *)
 let quit_command command = 
   match command with
   | [] -> Quit
   | h::t -> raise Malformed
 
+(** [info_command command] returns a Info command and raises exception Malformed
+if Info is followed by another input. *)
 let info_command command = 
   match command with 
   | [] -> Info
   | _ -> raise Malformed
 
+(** [portfolio_command command] returns a Portfolio command and raises exception Malformed
+if Portfolio is followed by another input. *)
 let portfolio_command command = 
   match command with 
   | [] -> Portfolio
   | _ -> raise Malformed
 
+(** [history_command command] returns a History command and raises exception Malformed
+if History is followed by another input. *)
 let history_command command = 
   match command with 
   | [] -> History
@@ -56,6 +72,8 @@ let history_command command =
 let stop_command command = 
   Stop
 
+(** [parse str] checks [str] for a valid command and raises Malformed if one
+    is not found.  *)
 let parse str =
   match (String.split_on_char ' ' str |> List.filter (fun x -> x <> "") ) with
   | [] -> raise Empty

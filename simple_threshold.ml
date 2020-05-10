@@ -7,6 +7,15 @@ let check_no_money amount stock_price buy_message =
 let check_counter (counter:int) (none_message:string) = 
   if (Stdlib.Int.equal counter 0) then true else false
 
+(** [threshold counter stock upper lower amount] checks the current price of
+[stock] and makes the appropriate transaction based on the inputted [upper], 
+[lower], and [amount].
+    Requires:
+    [stock] is a valid stock ticker in string form.
+    [upper] is a float >= 0.
+    [lower] is a float >= 0.
+    [amount] is an int >= 0.
+    [upper] >= [lower]. *)
 let rec threshold counter stock upper lower amount = 
   let stock_price = Engine.get_price stock 1 in
   let buy_message = "\nYou have no more money to spend :(\n" in 
