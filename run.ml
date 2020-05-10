@@ -60,8 +60,10 @@ let rec run () =
     run ()
   | Threshold prices -> run ()
   | Portfolio -> 
+    print_string "\n";
     Engine.data_processor (Engine.data_lines "transactions.txt") [] |>
     data_printer |> String.concat " " |> print_string;
+    print_string "\n";
     run ()
   | Stop -> run ()
   | Quit -> 
