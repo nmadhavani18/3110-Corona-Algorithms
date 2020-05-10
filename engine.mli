@@ -13,3 +13,6 @@ val buy : string -> int -> Base.unit
 
 val sell : string -> int -> Base.unit
 
+val data_lines : string -> (string * string * int) list
+
+val data_processor : (string * string * int) list -> (string * int) list -> (string * int) list

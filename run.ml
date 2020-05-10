@@ -1,14 +1,19 @@
 open Engine
 open Command
 
-let port_helper1 line = try Some (input_line line) with End_of_file -> None
+(** let port_helper1 line = try Some (input_line line) with End_of_file -> None
 
-let port_printer filename = 
-  let rec port_print_helper line acc = 
+    let port_printer filename = 
+    let rec port_print_helper line acc = 
     begin match (port_helper1 line) with 
       | None -> List.rev acc
       | Some a -> port_print_helper line (a :: acc)end in 
-  port_print_helper (open_in filename) []
+    port_print_helper (open_in filename) [] *)
+
+let rec data_printer lst = 
+  match lst with 
+  | [] -> []
+  | (stock,vol)::t -> stock::string_of_int vol::"shares"::data_printer t
 
 let message = 
   "\nType 'price (stock ticker) (volume)' to get the price for a stock.\n 
@@ -55,9 +60,8 @@ let rec run () =
     run ()
   | Threshold prices -> run ()
   | Portfolio -> 
-    print_string "\n";
-    port_printer "transactions.txt" 
-    |> List.iter (Printf.printf "%s\n");
+    Engine.data_processor (Engine.data_lines "transactions.txt") [] |>
+    data_printer |> String.concat " " |> print_string;
     run ()
   | Stop -> run ()
   | Quit -> 

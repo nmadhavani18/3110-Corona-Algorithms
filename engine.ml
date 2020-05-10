@@ -90,7 +90,28 @@ let record transType stock volume price time =
 let record_file filename str = 
   let out_channel = Out_channel.create ~append:true filename in 
   protect ~f:(fun () -> fprintf out_channel "%s\n" str)
-    ~finally:(fun () -> Out_channel.close out_channel)          
+    ~finally:(fun () -> Out_channel.close out_channel) 
+
+let line_read line = try Some (input_line line) with End_of_file -> None
+
+let data_lines filename = 
+  let rec line_list line acc= 
+    begin match line_read line with 
+      | None -> List.rev acc
+      | Some a -> let lst = String.split_on_char ' ' a in
+        line_list line ((List.nth lst 4, List.nth lst 0, int_of_string (List.nth lst 1))::acc) end in
+  line_list (open_in filename) []
+
+let rec data_processor (lst : (string * string * int) list) acc = 
+  match lst with 
+  | [] -> acc
+  | (stock,action,vol)::t -> if (List.mem_assoc stock acc) = false && action = "bought" 
+    then data_processor t ((stock,vol)::acc) 
+    else if (List.mem_assoc stock acc) = true && action = "bought" 
+    then data_processor t ((stock, vol + (List.assoc stock acc))::List.remove_assoc stock acc)
+    else if (List.mem_assoc stock acc) = true && action = "sold"
+    then data_processor t ((stock, (List.assoc stock acc) - vol)::List.remove_assoc stock acc)
+    else data_processor t acc
 
 let time =  
   Core.Time.now () |> Core.Time.to_string
