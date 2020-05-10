@@ -2,14 +2,14 @@ open Engine
 open Stdlib
 
 let check_no_money amount stock_price buy_message = 
-  if (amount -. stock_price) < 0.00 then true else false
+  amount -. stock_price < 0.00
 
 let check_counter (counter:int) (none_message:string) = 
-  if (Stdlib.Int.equal counter 0) then true else false
+  Stdlib.Int.equal counter 0
 
 (** [threshold counter stock upper lower amount] checks the current price of
-[stock] and makes the appropriate transaction based on the inputted [upper], 
-[lower], and [amount].
+    [stock] and makes the appropriate transaction based on the inputted [upper], 
+    [lower], and [amount].
     Requires:
     [stock] is a valid stock ticker in string form.
     [upper] is a float >= 0.
