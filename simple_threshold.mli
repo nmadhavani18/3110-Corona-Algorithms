@@ -1,1 +1,3 @@
-val threshold : string -> float -> float -> float -> unit
+val threshold : int -> string -> float -> float -> float -> unit
+
+val check_counter : int -> string -> bool

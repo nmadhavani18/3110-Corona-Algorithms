@@ -57,11 +57,13 @@ let rec run () =
     print_string "Your transaction was successful!\n";
     run ()
   | Threshold stock_bounds -> 
+    let data = Engine.data_processor (data_lines "transactions.txt") [] in
     let stock = (List.nth stock_bounds 0) in
+    let counter = Engine.shares_search stock data in 
     let upper = (float_of_string (List.nth stock_bounds 1)) in
     let lower = (float_of_string (List.nth stock_bounds 2)) in
     let amount = (float_of_string (List.nth stock_bounds 3)) in
-    Simple_threshold.threshold stock upper lower amount;
+    Simple_threshold.threshold counter stock upper lower amount;
     run ()
   | Portfolio -> 
     print_string "\n";
