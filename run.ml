@@ -71,17 +71,26 @@ let threshold_helper stock_bounds =
     Simple_threshold.threshold counter stock upper lower amount 
   else print_endline "Bad command."
 
+(* Info Message to inform users *)
 let message = 
-  "\nType 'price (stock ticker) (volume)' to get the price for a stock.\n 
-I.e. 'price AAPL 2' will give you the price of 2 shares of Apple stock.\n
-Type 'buy (stock ticker) (volume)' to buy specified number of shares of stock.\n
-I.e. 'buy AAPL 30' will buy 30 shares of Apple stock.\n
-Type 'sell (stock ticker) (volume)' to sell specified number of shares of stock.\n
-I.e. 'sell AAPL 30' will sell 30 shares of Apple stock.\n
-Type 'portfolio' to see all of the transactions you have made.\n"
+  "\nType 'price (stock ticker) (volume)' to get the price for a stock. 
+  I.e. 'price AAPL 2' will give you the price of 2 shares of Apple stock.\n
+Type 'buy (stock ticker) (volume)' to buy specified number of shares of stock.
+  I.e. 'buy AAPL 30' will buy 30 shares of Apple stock.\n
+Type 'sell (stock ticker) (volume)' to sell specified number of shares of stock.
+  I.e. 'sell AAPL 30' will sell 30 shares of Apple stock.\n
+Type 'portfolio' to see all of the transactions you have made.
+  I.e 'portfolio' will return all the stock you own. \n
+Type 'threshold (stock ticker) (upper bound) (lower bound) (amount to invest) 
+to run the threshold algorithm. The program will automatically buy the stock
+if it is below your inputted lower bound and will sell the stock if the stock 
+goes above the upper bound.
+  I.e. 'threshold AAPL 315 312 1000' will buy Apple stock if the price is 
+  below $312 and sell Apple stock if the price is above $315. It has $1000 to 
+  invest. Otherwise, it will do nothing.\n"
 
 (** run () processes user inputs and performs the appropriate action based on 
-the inputted command. *)
+    the inputted command. *)
 let rec run () =
   print_string "\nType your command here. If you need help, type 'info'. To quit, type 'quit'.\n> ";
   let input = read_line () in 
@@ -112,6 +121,7 @@ let rec run () =
   | exception Empty -> print_endline "You entered an empty command.";
     run () 
 
+(* Welcome Message to the game *)
 let play_game =
   ANSITerminal.(print_string [red]
                   "\n\nWelcome to the 3110 Stock Trading Platform.\n");
