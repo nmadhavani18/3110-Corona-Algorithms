@@ -125,5 +125,5 @@ let sell stock volume =
   record_file "transactions.txt" record_string
 
 let compare price1 price2 = 
-  if price1 > price2 then price1 else if price2 > price1 then price1 else -1
+  if price1 > price2 then true else if price2 > price1 then false else true
 

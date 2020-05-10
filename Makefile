@@ -1,4 +1,4 @@
-MODULES=engine authors command run
+MODULES=engine authors command run simple_threshold
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)

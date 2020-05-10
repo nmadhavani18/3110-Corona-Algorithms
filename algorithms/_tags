@@ -1,1 +1,0 @@
-true: package(core), package(lambdasoup), package(yojson), package(oUnit), package(ANSITerminal), package(mechaml), thread

@@ -1,5 +1,6 @@
 open Engine
 open Command
+open Simple_threshold
 
 (** let port_helper1 line = try Some (input_line line) with End_of_file -> None
 
@@ -58,7 +59,13 @@ let rec run () =
     print_string (List.nth stock 0); 
     print_string " shares sold!\n";
     run ()
-  | Threshold prices -> run ()
+  | Threshold stock_bounds -> 
+    let stock = (List.nth stock_bounds 0) in
+    let upper = (float_of_string (List.nth stock_bounds 1)) in
+    let lower = (float_of_string (List.nth stock_bounds 2)) in
+    let amount = (float_of_string (List.nth stock_bounds 3)) in
+    Simple_threshold.threshold stock upper lower amount;
+    run ()
   | Portfolio -> 
     print_string "\n";
     Engine.data_processor (Engine.data_lines "transactions.txt") [] |>
