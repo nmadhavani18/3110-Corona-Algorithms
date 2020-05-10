@@ -113,6 +113,11 @@ let rec data_processor (lst : (string * string * int) list) acc =
     then data_processor t ((stock, (List.assoc stock acc) - vol)::List.remove_assoc stock acc)
     else data_processor t acc
 
+let rec shares_search (stock : string) lst= 
+  match lst with 
+  | [] -> 0
+  | (sto,vol)::t -> if stock = sto then vol else shares_search stock t
+
 let time =  
   Core.Time.now () |> Core.Time.to_string
 
@@ -121,8 +126,15 @@ let buy stock volume =
   record_file "transactions.txt" record_string
 
 let sell stock volume = 
-  let record_string = record "sold" stock volume (get_price stock volume) time in
-  record_file "transactions.txt" record_string
+  let data = data_processor (data_lines "transactions.txt") [] in 
+  let shares = shares_search stock data in 
+  if volume > shares then 
+    let record_string = 
+      record "sold" stock (shares) (get_price stock shares) time in
+    record_file "transactions.txt" record_string
+  else let record_string = 
+         record "sold" stock (volume) (get_price stock volume) time in
+    record_file "transactions.txt" record_string
 
 let compare price1 price2 = 
   if price1 > price2 then price1 else if price2 > price1 then price1 else -1
