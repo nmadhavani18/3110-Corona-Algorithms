@@ -1,1 +1,1 @@
-val threshold : string -> float -> float -> float -> 'a
+val threshold : string -> float -> float -> float -> unit

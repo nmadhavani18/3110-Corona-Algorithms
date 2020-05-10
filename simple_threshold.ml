@@ -4,9 +4,8 @@ let rec threshold stock upper lower (amount:float) =
   let stock_price = Engine.get_price stock 1 in
   let message = "\nalgorithm has spent your money :)\n\n" in
   if (amount -. stock_price) < 0.00 then 
-    (ANSITerminal.(print_string [green]
-                     message); 
-     Stdlib.exit 0)
+    ANSITerminal.(print_string [green]
+                    message) 
   else if (Engine.compare lower stock_price) then
     (Engine.buy stock 1;
      print_string "\n";
