@@ -2,15 +2,11 @@ open Engine
 open Command
 open Simple_threshold
 
-(** [line_read line] attempts to read a single line from a file and throws
-    an End_of_file exception if no line exists. *)
-let line_read line = try Some (input_line line) with End_of_file -> None
-
 (** [history_printer filename] reads lines from a file and converts them into
     a string list for printing. *)
 let history_printer filename = 
   let rec history_print_helper line acc = 
-    begin match (line_read line) with 
+    begin match (Engine.line_read line) with 
       | None -> List.rev acc
       | Some a -> history_print_helper line (a :: acc)end in 
   history_print_helper (open_in filename) [] 
@@ -23,7 +19,7 @@ let rec data_printer lst =
   | (stock,vol)::t -> stock::string_of_int vol::"shares"::data_printer t
 
 (** [price_helper stock] returns the price of a specified number of shares
-    of the inputted stock. *)
+    of a stock based on the inputted price command. *)
 let price_helper stock = 
   let stock_name = List.nth stock 0 in
   let stock_volume = (int_of_string (List.nth stock 1)) in 
@@ -36,7 +32,7 @@ let price_helper stock =
   else print_endline "Bad command."
 
 (** [buy_helper stock] buys a specified number of shares of 
-    the inputted stock. *)
+    a stock based on the inputted buy command. *)
 let buy_helper stock = 
   let stock_name = List.nth stock 0 in
   let stock_volume = (int_of_string (List.nth stock 1)) in 
@@ -47,7 +43,7 @@ let buy_helper stock =
   else print_endline "Bad command."
 
 (** [sell_helper stock] sells a specified number of shares of 
-    the inputted stock. *)
+    a stock based on the inputted sell command. *)
 let sell_helper stock = 
   let stock_name = List.nth stock 0 in
   let stock_volume = (int_of_string (List.nth stock 1)) in 
@@ -67,7 +63,7 @@ let threshold_helper stock_bounds =
   let upper = (float_of_string (List.nth stock_bounds 1)) in
   let lower = (float_of_string (List.nth stock_bounds 2)) in
   let amount = (float_of_string (List.nth stock_bounds 3)) in
-  if upper > 0.00 && lower > 0.00 && amount > 0.00 && upper > lower then
+  if upper >= 0.00 && lower >= 0.00 && amount >= 0.00 && upper >= lower then
     Simple_threshold.threshold counter stock upper lower amount 
   else print_endline "Bad command."
 
@@ -81,7 +77,7 @@ I.e. 'sell AAPL 30' will sell 30 shares of Apple stock.\n
 Type 'portfolio' to see all of the transactions you have made.\n"
 
 (** run () processes user inputs and performs the appropriate action based on 
-the inputted command. *)
+    the inputted command. *)
 let rec run () =
   print_string "\nType your command here. If you need help, type 'info'. To quit, type 'quit'.\n> ";
   let input = read_line () in 

@@ -135,17 +135,24 @@ let rec data_processor (lst : (string * string * int) list) acc =
     else data_processor t acc
 
 (** [shares_search stock lst] returns the number of shares of a specified stock,
-    based on data from a pair list [lst]. *)
+    based on data from a pair list [lst].
+    Requires:
+      [stock] is a valid stock ticker in string form.
+      [lst] is a tuple list of (string * int). *)
 let rec shares_search (stock : string) lst= 
   match lst with 
   | [] -> 0
   | (sto,vol)::t -> if stock = sto then vol else shares_search stock t
 
+(** [time] returns the current time. *)
 let time =  
   Core.Time.now () |> Core.Time.to_string
 
 (** [buy stock volume] records a buying of an amount of a stock, for a certain
-    price, at a certain time, to be written into a transaction file. *)
+    price, at a certain time, to be written into a transaction file.
+    Requires:
+      [stock] is a valid stock ticker in string form. 
+      [volume] is an int >= 0. *)
 let buy stock volume = 
   let record_string = 
     record "bought" stock volume (get_price stock volume) time in
@@ -154,7 +161,10 @@ let buy stock volume =
 (** [sell stock volume] records a selling of an amount of a stock, for a certain
     price, at a certain time, to be written into a transaction file. If the 
     specified amount of shares to be sold exceeds the amount of shares held,
-    then all shares currently held are sold. *)
+    then all shares currently held are sold. 
+    Requires:
+      [stock] is a valid stock ticker in string form. 
+      [volume] is an int >= 0. *)
 let sell stock volume = 
   let data = data_processor (data_lines "transactions.txt") [] in 
   let shares = shares_search stock data in 
@@ -166,6 +176,8 @@ let sell stock volume =
          record "sold" stock (volume) (get_price stock volume) time in
     record_file "transactions.txt" record_string
 
+(** [compare price1 price2] returns True if [price1] is greater than or equal to
+[price2] and False otherwise. *)
 let compare price1 price2 = 
   if price1 > price2 then true else if price2 > price1 then false else true
 
