@@ -1,4 +1,0 @@
-bought 2 shares of AAPL at 620.26 on 2020-05-09 15:34:26.395838-07:00
-bought 3 shares of GOOGL at 4153.02 on 2020-05-09 15:34:26.395838-07:00
-sold 1 shares of AAPL at 310.13 on 2020-05-09 15:34:57.115527-07:00
-sold 4 shares of AAPL at 1240.52 on 2020-05-09 18:11:22.553626-07:00
