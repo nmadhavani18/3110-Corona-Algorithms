@@ -7,6 +7,7 @@ open Cohttp
 open Cohttp_lwt_unix
 open Stdlib
 
+
 let get_url stock = 
   String.concat "" ["https://www.marketbeat.com/stocks/NASDAQ/"; stock; "/"] 
 
@@ -23,7 +24,9 @@ let body stock=
 
 let body_NYSE stock=
   Client.get (Uri.of_string (get_NYSE_url stock)) >>= fun (resp, body) ->
-  body |> Cohttp_lwt.Body.to_string >|= fun body ->
+  body 
+  |> Cohttp_lwt.Body.to_string 
+  >|= fun body ->
   body
 
 let file stock =

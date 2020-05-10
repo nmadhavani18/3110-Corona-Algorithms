@@ -13,10 +13,11 @@ let port_printer filename =
 let message = 
   "\nType 'price (stock ticker) (volume)' to get the price for a stock.\n 
 I.e. 'price AAPL 2' will give you the price of 2 shares of Apple stock.\n
-Type 'buy (stock ticker) (volume)' to buy a specified number of shares of\n
-a stock. I.e. 'buy AAPL 30' will buy 30 shares of Apple stock.\n
-Type 'sell (stock ticker) (volume)' to sell a specified number of shares of\n
-a stock. I.e. 'sell AAPL 30' will sell 30 shares of Apple stock.\n"
+Type 'buy (stock ticker) (volume)' to buy a specified number of shares of a stock.\n
+I.e. 'buy AAPL 30' will buy 30 shares of Apple stock.\n
+Type 'sell (stock ticker) (volume)' to sell a specified number of shares of a stock.\n
+I.e. 'sell AAPL 30' will sell 30 shares of Apple stock.\n
+Type 'portfolio' to see all of the transactions you have made.\n"
 
 let rec run () =
   print_string "\nType your command here. If you need help, type 'info'. To quit, type 'quit'.\n> ";
@@ -24,21 +25,39 @@ let rec run () =
   match Command.parse input with 
   | Price stock -> 
     let price = (Engine.get_price (List.nth stock 0) (int_of_string (List.nth stock 1))) in
-    print_string "Price of "; print_string (List.nth stock 1); print_string " ";
-    print_string (List.nth stock 0); print_string " stock is: ";
-    price |> string_of_float |> ANSITerminal.(print_string [green]);
+    print_string "\nPrice of "; 
+    print_string (List.nth stock 1); 
+    print_string " ";
+    print_string (List.nth stock 0); 
+    print_string " shares is: ";
+    price 
+    |> string_of_float 
+    |> ANSITerminal.(print_string [green]);
+    print_string "\n";
     run ()
-  | Info -> ANSITerminal.(print_string [green]
+  | Info -> ANSITerminal.(print_string [red]
                             message); run ()
   | Buy stock -> 
     (Engine.buy (List.nth stock 0) (int_of_string (List.nth stock 1)));
+    print_string "\n"; 
+    print_string (List.nth stock 1); 
+    print_string " "; 
+    print_string (List.nth stock 0); 
+    print_string " shares bought!\n";
     run () 
   | Sell stock ->
     (Engine.sell (List.nth stock 0) (int_of_string (List.nth stock 1)));
+    print_string "\n"; 
+    print_string (List.nth stock 1); 
+    print_string " "; 
+    print_string (List.nth stock 0); 
+    print_string " shares sold!\n";
     run ()
   | Threshold prices -> run ()
   | Portfolio -> 
-    port_printer "transactions.txt" |> List.iter (Printf.printf "%s\n");
+    print_string "\n";
+    port_printer "transactions.txt" 
+    |> List.iter (Printf.printf "%s\n");
     run ()
   | Stop -> run ()
   | Quit -> 
@@ -48,7 +67,6 @@ let rec run () =
     run ()
   | exception Empty -> print_endline "You entered an empty command.";
     run () 
-
 
 let play_game =
   ANSITerminal.(print_string [red]
