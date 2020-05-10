@@ -2,14 +2,14 @@ open Engine
 open Command
 open Simple_threshold
 
-(** let port_helper1 line = try Some (input_line line) with End_of_file -> None
+let line_read line = try Some (input_line line) with End_of_file -> None
 
-    let port_printer filename = 
-    let rec port_print_helper line acc = 
-    begin match (port_helper1 line) with 
+let history_printer filename = 
+  let rec history_print_helper line acc = 
+    begin match (line_read line) with 
       | None -> List.rev acc
-      | Some a -> port_print_helper line (a :: acc)end in 
-    port_print_helper (open_in filename) [] *)
+      | Some a -> history_print_helper line (a :: acc)end in 
+  history_print_helper (open_in filename) [] 
 
 let rec data_printer lst = 
   match lst with 
@@ -30,7 +30,8 @@ let rec run () =
   let input = read_line () in 
   match Command.parse input with 
   | Price stock -> 
-    let price = (Engine.get_price (List.nth stock 0) (int_of_string (List.nth stock 1))) in
+    let stock_name = List.nth stock 0 in
+    let price = (Engine.get_price stock_name (int_of_string (List.nth stock 1))) in
     print_string "\nPrice of "; 
     print_string (List.nth stock 1); 
     print_string " ";
@@ -44,20 +45,16 @@ let rec run () =
   | Info -> ANSITerminal.(print_string [red]
                             message); run ()
   | Buy stock -> 
-    (Engine.buy (List.nth stock 0) (int_of_string (List.nth stock 1)));
+    let stock_name = List.nth stock 0 in
+    (Engine.buy stock_name (int_of_string (List.nth stock 1)));
     print_string "\n"; 
-    print_string (List.nth stock 1); 
-    print_string " "; 
-    print_string (List.nth stock 0); 
-    print_string " shares bought!\n";
+    print_string "Your transaction was successful!\n";
     run () 
   | Sell stock ->
-    (Engine.sell (List.nth stock 0) (int_of_string (List.nth stock 1)));
-    print_string "\n"; 
-    print_string (List.nth stock 1); 
-    print_string " "; 
-    print_string (List.nth stock 0); 
-    print_string " shares sold!\n";
+    let stock_name = List.nth stock 0 in
+    (Engine.sell stock_name (int_of_string (List.nth stock 1)));
+    print_string "\n";
+    print_string "Your transaction was successful!\n";
     run ()
   | Threshold stock_bounds -> 
     let stock = (List.nth stock_bounds 0) in
@@ -71,6 +68,9 @@ let rec run () =
     Engine.data_processor (Engine.data_lines "transactions.txt") [] |>
     data_printer |> String.concat " " |> print_string;
     print_string "\n";
+    run ()
+  | History -> 
+    history_printer "transactions.txt" |> List.iter (Printf.printf "%s\n");
     run ()
   | Stop -> run ()
   | Quit -> 

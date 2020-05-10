@@ -9,6 +9,7 @@ type command =
   | Sell of string list
   | Threshold of string list
   | Portfolio
+  | History
   | Stop
   | Quit
 
@@ -38,11 +39,18 @@ let check_valid_quit_command command =
   | h::t -> raise Malformed
 
 let info_command command = 
-  Info
+  match command with 
+  | [] -> Info
+  | _ -> raise Malformed
 
 let portfolio_command command = 
   match command with 
   | [] -> Portfolio
+  | _ -> raise Malformed
+
+let history_command command = 
+  match command with 
+  | [] -> History
   | _ -> raise Malformed
 
 let stop_command command = 
@@ -57,4 +65,5 @@ let parse str =
       (check_valid_threshold_command t) else if (h = "info") then 
       (info_command t) else if (h = "portfolio") then (portfolio_command t) else
     if (h = "stop") then (stop_command t) else if (h = "quit") then 
-      (check_valid_quit_command t) else raise Malformed
+      (check_valid_quit_command t) else if (h = "history") then 
+      (history_command t) else raise Malformed

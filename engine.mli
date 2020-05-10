@@ -18,3 +18,5 @@ val data_lines : string -> (string * string * int) list
 val data_processor : (string * string * int) list -> (string * int) list -> (string * int) list
 
 val compare : float -> float -> bool
+
+val shares_search : string -> (string * int) list -> int
