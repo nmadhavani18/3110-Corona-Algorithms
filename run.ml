@@ -1,6 +1,7 @@
 open Engine
 open Command
 open Simple_threshold
+open Mean_reversion
 
 (** [history_printer filename] reads lines from a file and converts them into
     a string list for printing. *)
@@ -67,6 +68,19 @@ let threshold_helper stock_bounds =
     Simple_threshold.threshold counter stock upper lower amount 
   else print_endline "Bad command."
 
+(** [mean_reversion_helper stock_bounds] takes in a stock name, a range, a stock 
+    price mean, and a total investment amount for use in a customized algorithm.*)
+let mean_reversion_helper stock_ranges = 
+  let data = Engine.data_processor (data_lines "transactions.txt") [] in
+  let stock = (List.nth stock_ranges 0) in
+  let counter = Engine.shares_search stock data in 
+  let range = (float_of_string (List.nth stock_ranges 1)) in
+  let mean = (float_of_string (List.nth stock_ranges 2)) in
+  let amount = (float_of_string (List.nth stock_ranges 3)) in
+  if range >= 0.00 && mean >= 0.00 && amount >= 0.00 && mean >= range then
+    Mean_reversion.mean_reversion counter stock range mean amount 
+  else print_endline "Bad command."
+
 (* Info Message to inform users *)
 let message = 
   "\nType 'price (stock ticker) (volume)' to get the price for a stock. 
@@ -83,6 +97,13 @@ if it is below your inputted lower bound and will sell the stock if the stock
 goes above the upper bound.
   I.e. 'threshold AAPL 315 312 1000' will buy Apple stock if the price is 
   below $312 and sell Apple stock if the price is above $315. It has $1000 to 
+  invest. Otherwise, it will do nothing.\n
+Type 'means (stock ticker) (range) (mean) (amount to invest) 
+to run the mean-reversion algorithm. The program will automatically buy the 
+stock if the share price is below your mean-range and will sell the stock 
+if the share price goes above the mean+range.
+  I.e. 'means AAPL 5 300 1000' will buy Apple stock if the price is 
+  below $295 and sell Apple stock if the price is above $305. It has $1000 to 
   invest. Otherwise, it will do nothing.\n"
 
 (** run () processes user inputs and performs the appropriate action based on 
@@ -100,6 +121,8 @@ let rec run () =
   | Sell stock -> sell_helper stock; 
     run ()
   | Threshold stock_bounds -> threshold_helper stock_bounds; 
+    run ()
+  | Mean_reversion stock_ranges -> mean_reversion_helper stock_ranges; 
     run ()
   | Portfolio -> print_string "\n";
     Engine.data_processor (Engine.data_lines "transactions.txt") [] |>

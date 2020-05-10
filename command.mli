@@ -7,6 +7,7 @@ type command =
   | Buy of string list
   | Sell of string list
   | Threshold of string list
+  | Mean_reversion of string list
   | Portfolio
   | History
   | Stop
