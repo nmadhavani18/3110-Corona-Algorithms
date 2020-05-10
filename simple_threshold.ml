@@ -12,28 +12,23 @@ let rec threshold counter stock upper lower amount =
   let buy_message = "\nYou have no more money to spend :(\n" in 
   let none_message = String.concat " " ["\nYou have no more"; stock; "stock\n"] in
   let no_purchase_message = "\nNo purchase\n" in 
-  if (Engine.compare lower stock_price) then
+  if Engine.compare lower stock_price then
     (if check_no_money amount stock_price buy_message then 
-       ANSITerminal.(print_string [green]
-                       buy_message)
+       ANSITerminal.(print_string [green] buy_message)
      else (Engine.buy stock 1;
-           print_string "\n";
-           print_string "1 share of ";
+           print_string "\n1 share of ";
            print_string stock;
            print_string " bought!\n";
            threshold (counter+1) stock upper lower (amount -. stock_price)))
-  else if (Engine.compare stock_price upper) then
+  else if Engine.compare stock_price upper then
     (if check_counter counter none_message then 
-       ANSITerminal.(print_string [green]
-                       none_message)
+       ANSITerminal.(print_string [green] none_message)
      else (Engine.sell stock 1;
-           print_string "\n";
-           print_string "1 share of ";
+           print_string "\n1 share of ";
            print_string stock;
            print_string " sold!\n";
-           threshold  (counter - 1) stock upper lower (amount +. stock_price)))
+           threshold (counter - 1) stock upper lower (amount +. stock_price)))
   else 
-    ANSITerminal.(print_string [green]
-                    no_purchase_message)
+    ANSITerminal.(print_string [green] no_purchase_message)
 (* threshold  counter stock upper lower amount) *)
 
