@@ -1,6 +1,15 @@
 open Engine
 open Command
 
+let port_helper1 line = try Some (input_line line) with End_of_file -> None
+
+let port_printer filename = 
+  let rec port_print_helper line acc = 
+    begin match (port_helper1 line) with 
+      | None -> List.rev acc
+      | Some a -> port_print_helper line (a :: acc)end in 
+  port_print_helper (open_in filename) []
+
 let message = 
   "\nType 'price (stock ticker) (volume)' to get the price for a stock.\n 
 I.e. 'price AAPL 2' will give you the price of 2 shares of Apple stock.\n
@@ -28,7 +37,9 @@ let rec run () =
     (Engine.sell (List.nth stock 0) (int_of_string (List.nth stock 1)));
     run ()
   | Threshold prices -> run ()
-  | Portfolio -> run ()
+  | Portfolio -> 
+    port_printer "transactions.txt" |> List.iter (Printf.printf "%s\n");
+    run ()
   | Stop -> run ()
   | Quit -> 
     print_endline "You are now exiting the system.";

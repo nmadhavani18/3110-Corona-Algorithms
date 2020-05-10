@@ -87,7 +87,7 @@ let record transType stock volume price time =
 let record_file filename str = 
   let out_channel = Out_channel.create ~append:true filename in 
   protect ~f:(fun () -> fprintf out_channel "%s\n" str)
-    ~finally:(fun () -> Out_channel.close out_channel)                  
+    ~finally:(fun () -> Out_channel.close out_channel)          
 
 let time =  
   Core.Time.now () |> Core.Time.to_string
@@ -102,5 +102,4 @@ let sell stock volume =
 
 let compare price1 price2 = 
   if price1 > price2 then price1 else if price2 > price1 then price1 else -1
-
 

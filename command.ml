@@ -41,7 +41,9 @@ let info_command command =
   Info
 
 let portfolio_command command = 
-  Portfolio
+  match command with 
+  | [] -> Portfolio
+  | _ -> raise Malformed
 
 let stop_command command = 
   Stop
