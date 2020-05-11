@@ -1,9 +1,15 @@
 open Engine
 open Stdlib
 
+(** [check_no_money amount stock_price buy_message] checks if the user has 
+    enough money to buy more of a specified stock. If the user does not have 
+    enough money, it returns true, otherwise it returns false. *)
 let check_no_money amount stock_price buy_message = 
   amount -. stock_price < 0.00
 
+(** [check_counter counter none_message] checks the current volume of a
+    specified stock in the user's portfolio and returns true if the user does 
+    not have any stock remaining. Otherwise it returns false. *)
 let check_counter (counter:int) (none_message:string) = 
   Stdlib.Int.equal counter 0
 
@@ -39,5 +45,4 @@ let rec threshold counter stock upper lower amount =
            threshold (counter - 1) stock upper lower (amount +. stock_price)))
   else 
     ANSITerminal.(print_string [green] no_purchase_message)
-(* threshold  counter stock upper lower amount) *)
 

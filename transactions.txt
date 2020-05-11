@@ -4,3 +4,9 @@ bought 1 shares of AAPL at 310.13 on 2020-05-10 17:18:26.885878-04:00
 sold 1 shares of AAPL at 310.13 on 2020-05-10 17:18:26.885878-04:00
 sold 1 shares of AAPL at 310.13 on 2020-05-10 17:18:26.885878-04:00
 sold 1 shares of AAPL at 310.13 on 2020-05-10 17:18:26.885878-04:00
+bought 1 shares of AAPL at 310.13 on 2020-05-10 18:00:44.306979-04:00
+sold 1 shares of AAPL at 310.13 on 2020-05-10 18:00:44.306979-04:00
+sold 0 shares of AAPL at 0. on 2020-05-10 18:00:44.306979-04:00
+bought 1 shares of AAPL at 310.13 on 2020-05-10 18:02:55.023384-04:00
+sold 1 shares of AAPL at 310.13 on 2020-05-10 18:02:55.023384-04:00
+sold 0 shares of AAPL at 0. on 2020-05-10 18:02:55.023384-04:00

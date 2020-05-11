@@ -7,21 +7,30 @@ open Cohttp
 open Cohttp_lwt_unix
 open Stdlib
 
-
+(** [get_url stock] fetches url of the a given Nasdaq stock as a string. *)
 let get_url stock = 
   String.concat "" ["https://www.marketbeat.com/stocks/NASDAQ/"; stock; "/"] 
 
+(** [get_NYSE_url stock] fetches url of the a given NYSE stock as a string. *)
 let get_NYSE_url stock = 
   String.concat "" ["https://www.marketbeat.com/stocks/NYSE/"; stock; "/"]
 
+(** [get_file stock] fetches file path of the html file of a given stock as a 
+    string. *)
 let get_file stock =
   String.concat "" ["html/"; stock; ".html"]
 
+(** [body stock] is a helper for file that takes the specific url 
+    associated with the given Nasdaq stock and returns the html body of that url
+    as a string. *)
 let body stock=
   Client.get (Uri.of_string (get_url stock)) >>= fun (resp, body) ->
   body |> Cohttp_lwt.Body.to_string >|= fun body ->
   body
 
+(** [body_NYSE stock] is a helper for file that takes the specific url 
+    associated with the given NYSE stock and returns the html body of that url 
+    as a string. *)
 let body_NYSE stock=
   Client.get (Uri.of_string (get_NYSE_url stock)) >>= fun (resp, body) ->
   body 
@@ -29,35 +38,54 @@ let body_NYSE stock=
   >|= fun body ->
   body
 
+(** [file stock] fetches the html file of a Nasdaq stock and returns it as a 
+    string. *)
 let file stock =
   let body = Lwt_main.run (body stock) in
   body
 
+(** [file_NYSE stock] fetches the html file of an NYSE stock and returns it as 
+    a string. *)
 let file_NYSE stock =
   let body = Lwt_main.run (body_NYSE stock) in
   body
 
+(** [save_file stock] saves the file of a stock in the case that the stock
+    is traded on Nasdaq. *)
 let save_file stock = 
   Core.Out_channel.write_all (get_file stock) ~data:(file stock)
 
+(** [save_file_NYSE stock] saves the file of a stock in the case that the stock
+    is traded on the New York Stock Exchange rather than on Nasdaq. *)
 let save_file_NYSE stock = 
   Core.Out_channel.write_all (get_file stock) ~data:(file_NYSE stock)
 
+(** [id_helper id] checks that the CSS tag id is correct for the 
+    parse_html_helper function. *)
 let rec id_helper id = 
   match id with 
   | None -> true
   | Some a -> if a = "some-other-id" then true else false
 
+(** [leaf_helper leaf] returns the leaf as a string for the parse_html_helper 
+    function. *)
 let rec leaf_helper leaf = 
   match leaf with 
   | None -> ""
   | Some a -> a
 
+(** [parse_html_helper lst] helps the parse_html function select the correct 
+    lambdasoup 'leaf' from the list of html. *)
 let rec parse_html_helper lst = 
   match lst with 
   | [] -> ""
   | (id,leaf)::t -> if id_helper id then leaf_helper leaf else parse_html_helper t
 
+(** [parse_html stock] helps the get_price function parse the html file that 
+    contains the price of a given stock and returns a float that is equal to
+    the price of 1 share of that given stock. 
+    Requires:
+      [stock] is a string that is the name of a valid stock ticker. *)
 let parse_html stock = 
   let nums = ['0'; '1'; '2'; '3'; '4'; '5'; '6'; '7'; '8'; '9'; '.'] in
   Soup.parse (read_file (get_file stock)) 
@@ -68,9 +96,11 @@ let parse_html stock =
   |> Core.String.filter ~f: (fun x -> List.mem x nums)
   |> float_of_string
 
-let print_price stock = 
-  print_float (parse_html stock)
-
+(** [get_price stock volume] gets the current value of a given volume of 
+    shares of a given stock in USD as a float. 
+    Requires:
+      [stock] is a string that is the name of a valid stock ticker
+      [volume] is an int >= 0.*)
 let get_price stock volume= 
   try 
     (save_file stock;
@@ -177,7 +207,7 @@ let sell stock volume =
     record_file "transactions.txt" record_string
 
 (** [compare price1 price2] returns True if [price1] is greater than or equal to
-[price2] and False otherwise. *)
+    [price2] and False otherwise. *)
 let compare price1 price2 = 
   if price1 > price2 then true else if price2 > price1 then false else true
 
