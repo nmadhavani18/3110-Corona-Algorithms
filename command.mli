@@ -8,9 +8,10 @@ type command =
   | Sell of string list
   | Threshold of string list
   | Mean_reversion of string list
+  | Profit of string list
   | Portfolio
   | History
-  | Stop
+  | Clear
   | Quit
 
 val parse : string -> command

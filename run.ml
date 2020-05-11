@@ -2,6 +2,12 @@ open Engine
 open Command
 open Simple_threshold
 open Mean_reversion
+open Profit
+
+let overwrite filename str = 
+  let a = open_out filename in
+  output_string a str;
+  close_out a
 
 (** [history_printer filename] reads lines from a file and converts them into
     a string list for printing. *)
@@ -81,6 +87,21 @@ let mean_reversion_helper stock_ranges =
     Mean_reversion.mean_reversion counter stock range mean amount 
   else print_endline "Bad command."
 
+(** [profit_helper stock_set] takes in a stock name, a minimum profit, a
+maximum loss, and a total investment amount for use in a customized 
+algorithm. *)
+let profit_helper stock_set = 
+  let data = Engine.data_processor (data_lines "transactions.txt") [] in
+  let data2 = Engine.profit_calc (data_lines "transactions.txt") [] in
+  let stock = (List.nth stock_set 0) in
+  let counter = Engine.shares_search stock data in
+  let current = Engine.profit_search stock data2 in
+  let minprof = (float_of_string (List.nth stock_set 1)) in
+  let maxloss = (float_of_string (List.nth stock_set 2)) in
+  let amount = (float_of_string (List.nth stock_set 3)) in
+  Profit.profit_alg counter stock current minprof maxloss amount
+
+
 (* Info Message to inform users *)
 let message = 
   "\nType 'price (stock ticker) (volume)' to get the price for a stock. 
@@ -89,22 +110,33 @@ Type 'buy (stock ticker) (volume)' to buy specified number of shares of stock.
   I.e. 'buy AAPL 30' will buy 30 shares of Apple stock.\n
 Type 'sell (stock ticker) (volume)' to sell specified number of shares of stock.
   I.e. 'sell AAPL 30' will sell 30 shares of Apple stock.\n
-Type 'portfolio' to see all of the transactions you have made.
+Type 'portfolio' to see the number of shares of each stock you own.
   I.e 'portfolio' will return all the stock you own. \n
-Type 'threshold (stock ticker) (upper bound) (lower bound) (amount to invest) 
+Type 'history' to see every transaction you have made before. \n
+Type 'clear' to clear the transaction history and the portfolio. \n
+Type 'threshold (stock ticker) (upper bound) (lower bound) (amount to invest)' 
 to run the threshold algorithm. The program will automatically buy the stock
 if it is below your inputted lower bound and will sell the stock if the stock 
 goes above the upper bound.
   I.e. 'threshold AAPL 315 312 1000' will buy Apple stock if the price is 
   below $312 and sell Apple stock if the price is above $315. It has $1000 to 
   invest. Otherwise, it will do nothing.\n
-Type 'means (stock ticker) (range) (mean) (amount to invest) 
+Type 'means (stock ticker) (range) (mean) (amount to invest)' 
 to run the mean-reversion algorithm. The program will automatically buy the 
 stock if the share price is below your mean-range and will sell the stock 
 if the share price goes above the mean+range.
   I.e. 'means AAPL 5 300 1000' will buy Apple stock if the price is 
   below $295 and sell Apple stock if the price is above $305. It has $1000 to 
-  invest. Otherwise, it will do nothing.\n"
+  invest. Otherwise, it will do nothing.\n
+Type 'profit (stock ticker) (min profit) (max loss) (amount to invest)'
+to run the profit-loss limit algorithm. The program will automatically buy
+the stock if the historical value of that stock in your portfolio exceeds your
+specified minimum profit and sell the stock if the historical value of that 
+stock is below your maximum loss tolerance.
+  I.e. 'profit AAPL 1300 5000 1500 will buy Apple stock if you have previously
+  made more than $1300 on Apple stock transactions and sell Apple stock if you
+  have previously lost more than $8000 on Apple stock transactions. It can buy
+  up to $1500 of stock. Otherwise, it will do nothing."
 
 (** run () processes user inputs and performs the appropriate action based on 
     the inputted command. *)
@@ -123,6 +155,8 @@ let rec run () =
   | Threshold stock_bounds -> threshold_helper stock_bounds; 
     run ()
   | Mean_reversion stock_ranges -> mean_reversion_helper stock_ranges; 
+    run () 
+  | Profit stock_set -> profit_helper stock_set;
     run ()
   | Portfolio -> print_string "\n";
     Engine.data_processor (Engine.data_lines "transactions.txt") [] |>
@@ -132,7 +166,8 @@ let rec run () =
   | History -> 
     history_printer "transactions.txt" |> List.iter (Printf.printf "%s\n");
     run ()
-  | Stop -> run ()
+  | Clear -> overwrite "transactions.txt" "";
+    run ()
   | Quit -> print_endline "You are now exiting the system."; 
     Stdlib.exit 0
   | exception Malformed -> print_endline "Invalid command. Try again"; 

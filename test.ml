@@ -40,7 +40,7 @@ let tests = [
         (Engine.record "bought" "NFLX" 10 450.32 "2020-05-01"));
   "test sell record" >:: (fun _ ->
       assert_equal "sold 4 shares of GOOGL at 523.18 on 2020-05-08"
-        (Engine.record "sold" "GOOGL" 4 523.18 "2020-05-01"));
+        (Engine.record "sold" "GOOGL" 4 523.18 "2020-05-08"));
   "test compare true" >:: (fun _ ->
       assert_equal true (Engine.compare 351.58 298.2));
   "test compare false" >:: (fun _ -> 

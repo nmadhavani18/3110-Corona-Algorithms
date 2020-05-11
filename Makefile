@@ -1,4 +1,4 @@
-MODULES=engine authors command run simple_threshold mean_reversion
+MODULES=engine authors command run simple_threshold mean_reversion profit
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)

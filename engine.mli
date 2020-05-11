@@ -19,10 +19,16 @@ val record : string -> string -> int -> float -> string -> string
 
 val line_read : in_channel -> string option
 
-val data_lines : string -> (string * string * int) list
+val data_lines : string -> (string * string * int * float) list
 
-val data_processor : (string * string * int) list -> (string * int) list -> (string * int) list
+val data_processor : (string * string * int * float) list -> 
+  (string * int) list -> (string * int) list
+
+val profit_calc : (string * string * int * float) list ->
+  (string * float) list -> (string * float) list
 
 val compare : float -> float -> bool
 
 val shares_search : string -> (string * int) list -> int
+
+val profit_search : string -> (string * float) list -> float

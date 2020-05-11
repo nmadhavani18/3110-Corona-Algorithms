@@ -102,8 +102,8 @@ let record_file filename str =
 let line_read line = try Some (input_line line) with End_of_file -> None
 
 (** [data_lines filename] reads through every line in a file, parsing out
-    the stock ticker, transaction type, and number of shares, and storing those
-    values in a tuple list. *)
+    the stock ticker, transaction type, number of shares, and value of
+    those shares, storing those values in a tuple list. *)
 let data_lines filename = 
   let rec line_list line acc= 
     begin match line_read line with 
@@ -112,27 +112,44 @@ let data_lines filename =
         let stock = List.nth lst 4 in 
         let action = List.nth lst 0 in 
         let vol = int_of_string (List.nth lst 1) in
-        line_list line ((stock, action, vol)::acc) end in
+        let value = float_of_string (List.nth lst 6) in
+        line_list line ((stock, action, vol, value)::acc) end in
   line_list (open_in filename) []
 
 (** [data_processor lst acc] reads through a tuple list and calculates the
     current number of shares for each stock based on the transaction history,
-    storing the stock ticker and shares in a pair.
-    Requires:
-      [lst] is a (string * string * int) list.*)
-let rec data_processor (lst : (string * string * int) list) acc = 
+    storing the stock ticker and shares in a pair. *)
+let rec data_processor (lst : (string * string * int * float) list) acc = 
   match lst with 
   | [] -> acc
-  | (stock,action,vol)::t -> 
+  | (stock,action,vol,value)::t -> 
     if (List.mem_assoc stock acc) = false && action = "bought" 
     then data_processor t ((stock,vol)::acc) 
     else if (List.mem_assoc stock acc) = true && action = "bought" 
-    then let rest = List.remove_assoc stock acc in 
+    then let rest = List.remove_assoc stock acc in
       data_processor t ((stock,vol+(List.assoc stock acc))::rest)
     else if (List.mem_assoc stock acc) = true && action = "sold"
     then let rest = List.remove_assoc stock acc in
       data_processor t ((stock, (List.assoc stock acc) - vol)::rest)
     else data_processor t acc
+
+(** [profit_calc lst acc] reads through a tuple list and calculates the
+    current value of the shares for each stock based on the transaction history,
+    storing the stock ticker and value in a pair. *)
+let rec profit_calc (lst : (string * string * int * float) list) acc =
+  match lst with 
+  | [] -> acc
+  | (stock,action,vol,value)::t ->
+    if (List.mem_assoc stock acc) = false && action = "bought"
+    then profit_calc t ((stock,0.00 -. value)::acc)
+    else if (List.mem_assoc stock acc) = true && action = "bought" 
+    then let tail = List.remove_assoc stock acc in
+      profit_calc t ((stock,(List.assoc stock acc) -. value)::tail)
+    else if (List.mem_assoc stock acc) = true && action = "sold"
+    then let tail = List.remove_assoc stock acc in
+      profit_calc t ((stock,(List.assoc stock acc) +. value)::tail)
+    else profit_calc t acc
+
 
 (** [shares_search stock lst] returns the number of shares of a specified stock,
     based on data from a pair list [lst].
@@ -143,6 +160,16 @@ let rec shares_search (stock : string) lst=
   match lst with 
   | [] -> 0
   | (sto,vol)::t -> if stock = sto then vol else shares_search stock t
+
+(** [profit_search stock lst] returns the value of a specified [stock] based
+    on data from a pair list [lst].
+    Requires:
+      [stock] is a valid stock ticker in string form.
+      [lst] is a tuple list of (string * float). *)
+let rec profit_search (stock : string) (lst : (string * float) list) =
+  match lst with 
+  | [] -> 0.00
+  | (sto,value)::t -> if stock = sto then value else profit_search stock t
 
 (** [time] returns the current time. *)
 let time =  
@@ -177,7 +204,8 @@ let sell stock volume =
     record_file "transactions.txt" record_string
 
 (** [compare price1 price2] returns True if [price1] is greater than or equal to
-[price2] and False otherwise. *)
+    [price2] and False otherwise. *)
 let compare price1 price2 = 
   if price1 > price2 then true else if price2 > price1 then false else true
+
 
