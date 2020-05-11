@@ -103,15 +103,19 @@ let mean_reversion_helper stock_ranges =
     maximum loss, and a total investment amount for use in a customized 
     algorithm. *)
 let profit_helper stock_set = 
-  let data = Engine.data_processor (data_lines "transactions.txt") [] in
-  let data2 = Engine.profit_calc (data_lines "transactions.txt") [] in
-  let stock = (List.nth stock_set 0) in
-  let counter = Engine.shares_search stock data in
-  let current = Engine.profit_search stock data2 in
-  let minprof = (float_of_string (List.nth stock_set 1)) in
-  let maxloss = (float_of_string (List.nth stock_set 2)) in
-  let amount = (float_of_string (List.nth stock_set 3)) in
-  Profit.profit_alg counter stock current minprof maxloss amount
+  try 
+    let data = Engine.data_processor (data_lines "transactions.txt") [] in
+    let data2 = Engine.profit_calc (data_lines "transactions.txt") [] in
+    let stock = (List.nth stock_set 0) in
+    let counter = Engine.shares_search stock data in
+    let current = Engine.profit_search stock data2 in
+    let minprof = (float_of_string (List.nth stock_set 1)) in
+    let maxloss = (float_of_string (List.nth stock_set 2)) in
+    let amount = (float_of_string (List.nth stock_set 3)) in
+    if minprof >= 0.00 && maxloss >= 0.00 && amount >= 0.00 then
+      Profit.profit_alg counter stock current minprof maxloss amount
+    else print_endline "Bad command."
+  with _ -> print_endline "\nInvalid Stock."
 
 
 (* Info Message to inform users *)
@@ -181,7 +185,7 @@ let rec run () =
     history_printer "transactions.txt" |> List.iter (Printf.printf "%s\n");
     run ()
   | Clear -> overwrite "transactions.txt" "";
-    run ()
+    print_endline "\nSuccessfully cleared data."; run ()
   | Quit -> print_endline "You are now exiting the system."; 
     Stdlib.exit 0
   | exception Malformed -> print_endline "Invalid command. Try again"; 
