@@ -1,7 +1,9 @@
-Packages:
+Required packages:
 
 opam install lambdasoup
 opam install core
 opam install cohttp lwt js_of_ocaml
 opam depext lwt_ssl
 opam install lwt_ssl
+
+Use make play to demo the system.
