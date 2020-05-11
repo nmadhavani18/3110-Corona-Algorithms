@@ -25,7 +25,8 @@ let check_counter (counter:int) (none_message:string) =
 let rec mean_reversion counter stock range mean amount = 
   let stock_price = Engine.get_price stock 1 in
   let buy_message = "\nYou have no more money to spend :(\n" in 
-  let none_message = String.concat " " ["\nYou have no more"; stock; "stock\n"] in
+  let none_message = 
+    String.concat " " ["\nYou have no more"; stock; "stock\n"] in
   let no_purchase_message = "\nNo purchase\n" in 
   let lower = mean -. range in
   let upper = mean +. range in
@@ -36,7 +37,7 @@ let rec mean_reversion counter stock range mean amount =
            print_string "\n1 share of ";
            print_string stock;
            print_string " bought!\n";
-           mean_reversion (counter+1) stock range mean (amount -. stock_price)))
+           mean_reversion (counter+1) stock range mean (amount-.stock_price)))
   else if Engine.compare stock_price upper then
     (if check_counter counter none_message then 
        ANSITerminal.(print_string [green] none_message)
@@ -44,7 +45,7 @@ let rec mean_reversion counter stock range mean amount =
            print_string "\n1 share of ";
            print_string stock;
            print_string " sold!\n";
-           mean_reversion (counter - 1) stock range mean (amount +. stock_price)))
+           mean_reversion (counter-1) stock range mean (amount+.stock_price)))
   else 
     ANSITerminal.(print_string [green] no_purchase_message)
 

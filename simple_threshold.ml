@@ -25,7 +25,8 @@ let check_counter (counter:int) (none_message:string) =
 let rec threshold counter stock upper lower amount = 
   let stock_price = Engine.get_price stock 1 in
   let buy_message = "\nYou have no more money to spend :(\n" in 
-  let none_message = String.concat " " ["\nYou have no more"; stock; "stock\n"] in
+  let none_message = 
+    String.concat " " ["\nYou have no more"; stock; "stock\n"] in
   let no_purchase_message = "\nNo purchase\n" in 
   if Engine.compare lower stock_price then
     (if check_no_money amount stock_price buy_message then 

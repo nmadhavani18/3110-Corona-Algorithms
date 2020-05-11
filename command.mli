@@ -1,3 +1,7 @@
+(** 
+  Parsing of user commands.
+  *)
+
 exception Empty
 exception Malformed
 

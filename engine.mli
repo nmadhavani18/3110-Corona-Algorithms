@@ -1,3 +1,7 @@
+(** 
+   Engine for performing trades. 
+*)
+
 
 val get_price : string -> int -> float
 

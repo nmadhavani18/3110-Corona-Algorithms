@@ -79,7 +79,8 @@ let rec leaf_helper leaf =
 let rec parse_html_helper lst = 
   match lst with 
   | [] -> ""
-  | (id,leaf)::t -> if id_helper id then leaf_helper leaf else parse_html_helper t
+  | (id,leaf)::t -> 
+    if id_helper id then leaf_helper leaf else parse_html_helper t
 
 (** [parse_html stock] helps the get_price function parse the html file that 
     contains the price of a given stock and returns a float that is equal to

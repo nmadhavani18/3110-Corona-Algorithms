@@ -1,6 +1,5 @@
 open Engine
 
-
 (** [profit_alg counter stock current minp maxl amount] checks the current 
     value of a stock in [current] and performs the appropriate transaction based
     on the data in [minp], [maxl], and [amount].
@@ -11,7 +10,8 @@ open Engine
 let rec profit_alg counter stock current minp maxl amount =
   let stock_price = Engine.get_price stock 1 in
   let buy_message = "\nYou have no more money to spend :(\n" in 
-  let none_message = String.concat " " ["\nYou have no more"; stock; "stock\n"] in
+  let none_message = 
+    String.concat " " ["\nYou have no more"; stock; "stock\n"] in
   let no_purchase_message = "\nYour stock does not meet the conditions\n
   for a transaction." in 
   if current > minp then 
@@ -21,7 +21,8 @@ let rec profit_alg counter stock current minp maxl amount =
            print_string "\n1 share of ";
            print_string stock;
            print_string " bought!\n";
-           profit_alg (counter+1) stock current minp maxl (amount -. stock_price)))
+           profit_alg 
+             (counter+1) stock current minp maxl (amount-.stock_price)))
   else if current < 0.00 -. maxl then 
     (if Stdlib.Int.equal counter 0 then
        ANSITerminal.(print_string [green] none_message)

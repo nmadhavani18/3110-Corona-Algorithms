@@ -8,7 +8,7 @@ open Command
     unit tests would be ineffective for our numerical outputs as most were based
     on constantly changing numbers. The algorithms (mean_reversion, threshold, 
     etc.) cannot be tested by OUnit testing, since they are dependent on the 
-    precise stock prices at any given time. However, we used asser_bool 
+    precise stock prices at any given time. However, we used assert_bool 
     functions in order to test our get_price function using bounds that stock 
     prices were highly unlikely to cross. Additionally, many functions were 
     called several times in other locations so the best way to ensure 
@@ -59,7 +59,8 @@ let tests = [
   "test NYSE penny stock price" >:: (fun _ -> 
       assert_bool "TRQ Price < 5" ((Engine.get_price "TRQ" 1) < 5.00));
   "test multiple shares NASDAQ price" >:: (fun _ -> 
-      assert_bool "2 AAPL Price < 1200" ((Engine.get_price "AAPL" 2) < 1200.00));
+      assert_bool "2 AAPL Price < 1200" 
+        ((Engine.get_price "AAPL" 2) < 1200.00));
   "test multiple shares NASDAQ price" >:: (fun _ -> 
       assert_bool "2 AAPL Price > 100" ((Engine.get_price "AAPL" 2) > 200.00));
   "test multiple shares NYSE price" >:: (fun _ -> 

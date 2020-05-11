@@ -4,6 +4,8 @@ open Simple_threshold
 open Mean_reversion
 open Profit
 
+(** [overwrite filename str] replaces the lines in [file] with 
+    the string [str].*)
 let overwrite filename str = 
   let a = open_out filename in
   output_string a str;
@@ -82,7 +84,8 @@ let threshold_helper stock_bounds =
     else print_endline "Bad command."
   with _ -> print_endline "\nInvalid Stock."
 (** [mean_reversion_helper stock_bounds] takes in a stock name, a range, a stock 
-    price mean, and a total investment amount for use in a customized algorithm.*)
+    price mean, and a total investment amount for use in 
+    a customized algorithm.*)
 let mean_reversion_helper stock_ranges = 
   try 
     let data = Engine.data_processor (data_lines "transactions.txt") [] in
@@ -97,8 +100,8 @@ let mean_reversion_helper stock_ranges =
   with _ -> print_endline "\nInvalid Stock."
 
 (** [profit_helper stock_set] takes in a stock name, a minimum profit, a
-maximum loss, and a total investment amount for use in a customized 
-algorithm. *)
+    maximum loss, and a total investment amount for use in a customized 
+    algorithm. *)
 let profit_helper stock_set = 
   let data = Engine.data_processor (data_lines "transactions.txt") [] in
   let data2 = Engine.profit_calc (data_lines "transactions.txt") [] in
@@ -150,7 +153,8 @@ stock is below your maximum loss tolerance.
 (** run () processes user inputs and performs the appropriate action based on 
     the inputted command. *)
 let rec run () =
-  print_string "\nType your command here. If you need help, type 'info'. To quit, type 'quit'.\n> ";
+  print_string 
+    "\nType your command here. For help, type 'info'. To quit, type 'quit'.\n>";
   let input = read_line () in 
   match Command.parse input with 
   | Price stock -> price_helper stock; 
