@@ -1,0 +1,24 @@
+Individually, each of us put in around 45 hours of work to this project. 
+At the beginning of our journey, we were planning on using a preexisting 
+OCAML trading engine from a library that we had found online. This meant that
+most of our effort would be put into developing algorithms to write on top of 
+the preexisting engine. However, we found out later that the library had not
+been maintained for a few years, and there were major issues that would not 
+allow us to use it. Our solution was to build a mock trading platform; a 
+platform that would allow us to buy and sell stocks, however not using real 
+money. In order to do this, we needed to learn about webscraping and also needed
+to implement libraries and recent topics from class that we had never used 
+in a project before. Examples of this were the Cohttp library that we used for 
+pulling html, the lambdasoup library that we used to parse the html, and Jane
+Street's Core library that had a few quirks that required a bit of a learning 
+curve (although it was pretty similar to Stdlib). We also used a few callbacks
+while pulling html from servers, which is a relatively new topic from class. 
+While the LOC count is close to or maybe a little above the minimum for the 
+project, we believe that the complexity and creativity of this project 
+portrays the hard work that both of us put in as well as the passion we had for
+building it. We also achieved everything that we had set out to make in our 
+project proposal, despite the setbacks mentioned above. While the LOC count
+might not be tremendous, building the engine on which we were able to write the 
+algorithms was one of the most challenging projects either of us has ever 
+undertaken. We hope you will take this under consideration when grading the 
+complexity.

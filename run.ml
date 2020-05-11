@@ -28,64 +28,73 @@ let rec data_printer lst =
 (** [price_helper stock] returns the price of a specified number of shares
     of a stock based on the inputted price command. *)
 let price_helper stock = 
-  let stock_name = List.nth stock 0 in
-  let stock_volume = (int_of_string (List.nth stock 1)) in 
-  if stock_volume >= 0 then 
-    (let price = (Engine.get_price stock_name stock_volume) in
-     print_string "\nPrice of "; print_string stock_name; print_string " ";
-     print_string (List.nth stock 1); print_string " shares is: ";
-     price |> string_of_float |> ANSITerminal.(print_string [green]);
-     print_string "\n")
-  else print_endline "Bad command."
+  try
+    let stock_name = List.nth stock 0 in
+    let stock_volume = (int_of_string (List.nth stock 1)) in 
+    if stock_volume >= 0 then 
+      (let price = (Engine.get_price stock_name stock_volume) in
+       print_string "\nPrice of "; print_string stock_name; print_string " ";
+       print_string (List.nth stock 1); print_string " shares is: ";
+       price |> string_of_float |> ANSITerminal.(print_string [green]);
+       print_string "\n")
+    else print_endline "Bad command."
+  with _ -> print_endline "\nInvalid Stock."
 
 (** [buy_helper stock] buys a specified number of shares of 
     a stock based on the inputted buy command. *)
 let buy_helper stock = 
-  let stock_name = List.nth stock 0 in
-  let stock_volume = (int_of_string (List.nth stock 1)) in 
-  if stock_volume >= 0 then 
-    (Engine.buy stock_name stock_volume;
-     print_string "\n"; 
-     print_string "Your transaction was successful!\n")
-  else print_endline "Bad command."
+  try
+    let stock_name = List.nth stock 0 in
+    let stock_volume = (int_of_string (List.nth stock 1)) in 
+    if stock_volume >= 0 then 
+      (Engine.buy stock_name stock_volume;
+       print_string "\n"; 
+       print_string "Your transaction was successful!\n")
+    else print_endline "Bad command."
+  with _ -> print_endline "\nInvalid Stock."
 
 (** [sell_helper stock] sells a specified number of shares of 
     a stock based on the inputted sell command. *)
 let sell_helper stock = 
-  let stock_name = List.nth stock 0 in
-  let stock_volume = (int_of_string (List.nth stock 1)) in 
-  if stock_volume >= 0 then
-    (Engine.sell stock_name stock_volume;
-     print_string "\n"; 
-     print_string "Your transaction was successful!\n")
-  else print_endline "Bad command."
+  try 
+    let stock_name = List.nth stock 0 in
+    let stock_volume = (int_of_string (List.nth stock 1)) in 
+    if stock_volume >= 0 then
+      (Engine.sell stock_name stock_volume;
+       print_string "\n"; 
+       print_string "Your transaction was successful!\n")
+    else print_endline "Bad command."
+  with _ -> print_endline "\nInvalid Stock."
 
 (** [threshold_helper stock_bounds] takes in a stock name, a upper and lower
     bound for price, and a total investment amount for use 
     in a customized algorithm.*)
 let threshold_helper stock_bounds = 
-  let data = Engine.data_processor (data_lines "transactions.txt") [] in
-  let stock = (List.nth stock_bounds 0) in
-  let counter = Engine.shares_search stock data in 
-  let upper = (float_of_string (List.nth stock_bounds 1)) in
-  let lower = (float_of_string (List.nth stock_bounds 2)) in
-  let amount = (float_of_string (List.nth stock_bounds 3)) in
-  if upper >= 0.00 && lower >= 0.00 && amount >= 0.00 && upper >= lower then
-    Simple_threshold.threshold counter stock upper lower amount 
-  else print_endline "Bad command."
-
+  try
+    let data = Engine.data_processor (data_lines "transactions.txt") [] in
+    let stock = (List.nth stock_bounds 0) in
+    let counter = Engine.shares_search stock data in 
+    let upper = (float_of_string (List.nth stock_bounds 1)) in
+    let lower = (float_of_string (List.nth stock_bounds 2)) in
+    let amount = (float_of_string (List.nth stock_bounds 3)) in
+    if upper >= 0.00 && lower >= 0.00 && amount >= 0.00 && upper >= lower then
+      Simple_threshold.threshold counter stock upper lower amount 
+    else print_endline "Bad command."
+  with _ -> print_endline "\nInvalid Stock."
 (** [mean_reversion_helper stock_bounds] takes in a stock name, a range, a stock 
     price mean, and a total investment amount for use in a customized algorithm.*)
 let mean_reversion_helper stock_ranges = 
-  let data = Engine.data_processor (data_lines "transactions.txt") [] in
-  let stock = (List.nth stock_ranges 0) in
-  let counter = Engine.shares_search stock data in 
-  let range = (float_of_string (List.nth stock_ranges 1)) in
-  let mean = (float_of_string (List.nth stock_ranges 2)) in
-  let amount = (float_of_string (List.nth stock_ranges 3)) in
-  if range >= 0.00 && mean >= 0.00 && amount >= 0.00 && mean >= range then
-    Mean_reversion.mean_reversion counter stock range mean amount 
-  else print_endline "Bad command."
+  try 
+    let data = Engine.data_processor (data_lines "transactions.txt") [] in
+    let stock = (List.nth stock_ranges 0) in
+    let counter = Engine.shares_search stock data in 
+    let range = (float_of_string (List.nth stock_ranges 1)) in
+    let mean = (float_of_string (List.nth stock_ranges 2)) in
+    let amount = (float_of_string (List.nth stock_ranges 3)) in
+    if range >= 0.00 && mean >= 0.00 && amount >= 0.00 && mean >= range then
+      Mean_reversion.mean_reversion counter stock range mean amount 
+    else print_endline "Bad command."
+  with _ -> print_endline "\nInvalid Stock."
 
 (** [profit_helper stock_set] takes in a stock name, a minimum profit, a
 maximum loss, and a total investment amount for use in a customized 
@@ -164,6 +173,7 @@ let rec run () =
     print_string "\n";
     run ()
   | History -> 
+    print_string "\n";
     history_printer "transactions.txt" |> List.iter (Printf.printf "%s\n");
     run ()
   | Clear -> overwrite "transactions.txt" "";
